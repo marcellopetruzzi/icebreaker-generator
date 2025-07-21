@@ -371,19 +371,16 @@ Format this as a professional document with clear sections and proper spacing.`;
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <div className="relative h-64 bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent"></div>
-        <div className="relative z-10 container mx-auto px-6 py-12">
+      <div className="header-gradient">
+        <div className="header-overlay"></div>
+        <div className="header-content">
           <h1 className="text-4xl font-bold text-white mb-4">
             Icebreaker Generator
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl">
+          <p className="text-xl text-blue-100">
             Generate engaging activities to break the ice and energize your working groups
           </p>
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-green-400/20 to-blue-500/20 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-6 py-8">
