@@ -220,23 +220,19 @@ REQUIRED STRUCTURE:
 
 Generate an innovative, engaging activity suitable for professional facilitation contexts. Be creative but practical. Remember: ALL content must be written in ${languageName}.`;
 
-      console.log('Making API request to Anthropic...');
+      console.log('Making API request via proxy...');
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": process.env.REACT_APP_ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01"
         },
         body: JSON.stringify({
-          model: "claude-3-5-sonnet-20241022",
-          max_tokens: 2000,
-          messages: [
-            { role: "user", content: prompt }
-          ]
+          prompt: prompt
         })
       });
+
+      console.log('Response received:', response);
 
       console.log('Response status:', response.status);
       console.log('Response headers:', Object.fromEntries(response.headers.entries()));
@@ -309,18 +305,13 @@ ${output}
 
 Format this as a professional document with clear sections and proper spacing.`;
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": process.env.REACT_APP_ANTHROPIC_API_KEY,
         },
         body: JSON.stringify({
-          model: "claude-3-5-sonnet-20241022",
-          max_tokens: 2000,
-          messages: [
-            { role: "user", content: prompt }
-          ]
+          prompt: prompt
         })
       });
 
