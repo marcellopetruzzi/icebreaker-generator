@@ -159,6 +159,11 @@ const App = () => {
     setIsGenerating(true);
     
     try {
+      // Debug: Check if API key exists
+      if (!process.env.REACT_APP_ANTHROPIC_API_KEY) {
+        throw new Error('API key not found. Please check your environment variables.');
+      }
+
       const allPurposes = [...formData.purposes];
       if (formData.customPurpose1) allPurposes.push(formData.customPurpose1);
       if (formData.customPurpose2) allPurposes.push(formData.customPurpose2);
@@ -212,6 +217,7 @@ Generate an innovative, engaging activity suitable for professional facilitation
         headers: {
           "Content-Type": "application/json",
           "x-api-key": process.env.REACT_APP_ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01"
         },
         body: JSON.stringify({
           model: "claude-3-5-sonnet-20241022",
@@ -225,7 +231,8 @@ Generate an innovative, engaging activity suitable for professional facilitation
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(`API Error: ${data.error?.message || 'Unknown error'}`);
+        console.error('API Response:', data);
+        throw new Error(`API Error: ${data.error?.message || `HTTP ${response.status}`}`);
       }
       
       const generatedActivity = data.content[0].text;
