@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Coffee, RefreshCw, Play, Users, Clock, Target, Package, MessageSquare, Edit3, Globe } from 'lucide-react';
 
-const App = () => {
+const IcebreakerGenerator = () => {
   const [formData, setFormData] = useState({
     duration: '',
     people: '',
+    workgroups: '',
     purposes: [],
     customPurpose1: '',
     customPurpose2: '',
     desiredOutcome: '',
     requiredMaterials: '',
     additionalNotes: '',
-    language: ''
+    language: '',
+    interfaceLanguage: 'en',
+    includeTimeBreakdown: true
   });
 
   const [output, setOutput] = useState('');
@@ -21,7 +24,177 @@ const App = () => {
   const [initialFormData, setInitialFormData] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const predefinedPurposes = ['Relaxation', 'Energization', 'Connection', 'Body Movement', 'Awakening', 'Fun'];
+  // Translations object
+  const translations = {
+    en: {
+      title: "Icebreaker Generator",
+      subtitle: "Generate engaging activities to break the ice and energize your collaborative groups",
+      activityParameters: "Activity Parameters",
+      duration: "Ideal Duration (minutes)",
+      people: "Number of Participants",
+      purpose: "Purpose (max 2 selections)",
+      customPurpose1: "Custom purpose 1",
+      customPurpose2: "Custom purpose 2", 
+      desiredOutcome: "Desired Outcome (optional)",
+      requiredMaterials: "Required Materials (optional)",
+      additionalNotes: "What else? (optional)",
+      languageSettings: "Language Settings",
+      interfaceLanguage: "Interface Language",
+      outputLanguage: "Output Language",
+      activityOptions: "Activity Options",
+      timeBreakdown: "Include detailed time breakdown",
+      timeBreakdownDesc: "Break down the duration into phases (setup, main activity, sharing, etc.)",
+      generate: "Generate",
+      update: "Update",
+      generating: "Generating...",
+      parametersChanged: "Parameters changed - click Update to regenerate",
+      generatedActivity: "Generated Activity",
+      fillParameters: "Fill in the parameters and click \"Generate\" to start",
+      generatingActivity: "Generating your personalized activity...",
+      downloadCSV: "Download CSV",
+      downloadText: "Download Text",
+      buyMeCoffee: "Buy me a coffee",
+      selectLanguage: "Select output language...",
+      workgroups: "Work Groups (optional)",
+      workgroupsPlaceholder: "e.g. 3 groups of 5 people, pairs, individual work...",
+      purposes: ['Relaxation', 'Energization', 'Connection', 'Body Movement', 'Awakening', 'Fun']
+    },
+    it: {
+      title: "Generatore di Icebreaker",
+      subtitle: "Genera attività coinvolgenti per rompere il ghiaccio ed energizzare i tuoi gruppi collaborativi",
+      activityParameters: "Parametri dell'Attività",
+      duration: "Durata Ideale (minuti)",
+      people: "Numero di Partecipanti",
+      purpose: "Scopo (max 2 selezioni)",
+      customPurpose1: "Scopo personalizzato 1",
+      customPurpose2: "Scopo personalizzato 2",
+      desiredOutcome: "Risultato Desiderato (opzionale)",
+      requiredMaterials: "Materiali Necessari (opzionale)",
+      additionalNotes: "Cos'altro? (opzionale)",
+      languageSettings: "Impostazioni Lingua",
+      interfaceLanguage: "Lingua Interfaccia",
+      outputLanguage: "Lingua Output",
+      activityOptions: "Opzioni Attività",
+      timeBreakdown: "Includi suddivisione temporale dettagliata",
+      timeBreakdownDesc: "Suddividi la durata in fasi (preparazione, attività principale, condivisione, ecc.)",
+      generate: "Genera",
+      update: "Aggiorna",
+      generating: "Generando...",
+      parametersChanged: "Parametri cambiati - clicca Aggiorna per rigenerare",
+      generatedActivity: "Attività Generata",
+      fillParameters: "Compila i parametri e clicca \"Genera\" per iniziare",
+      generatingActivity: "Generando la tua attività personalizzata...",
+      downloadCSV: "Scarica CSV",
+      downloadText: "Scarica Testo",
+      buyMeCoffee: "Offrimi un caffè",
+      selectLanguage: "Seleziona lingua di output...",
+      workgroups: "Sottogruppi di Lavoro (opzionale)",
+      workgroupsPlaceholder: "es. 3 gruppi da 5 persone, coppie, lavoro individuale...",
+      purposes: ['Rilassamento', 'Energizzazione', 'Connessione', 'Movimento Corporeo', 'Risveglio', 'Divertimento']
+    },
+    es: {
+      title: "Generador de Rompe Hielos",
+      subtitle: "Genera actividades atractivas para romper el hielo y energizar tus grupos colaborativos",
+      activityParameters: "Parámetros de la Actividad",
+      duration: "Duración Ideal (minutos)",
+      people: "Número de Participantes",
+      purpose: "Propósito (máx 2 selecciones)",
+      customPurpose1: "Propósito personalizado 1",
+      customPurpose2: "Propósito personalizado 2",
+      desiredOutcome: "Resultado Deseado (opcional)",
+      requiredMaterials: "Materiales Necesarios (opcional)",
+      additionalNotes: "¿Qué más? (opcional)",
+      languageSettings: "Configuración de Idioma",
+      interfaceLanguage: "Idioma de la Interfaz",
+      outputLanguage: "Idioma de Salida",
+      activityOptions: "Opciones de Actividad",
+      timeBreakdown: "Incluir desglose temporal detallado",
+      timeBreakdownDesc: "Dividir la duración en fases (preparación, actividad principal, compartir, etc.)",
+      generate: "Generar",
+      update: "Actualizar",
+      generating: "Generando...",
+      parametersChanged: "Parámetros cambiados - haz clic en Actualizar para regenerar",
+      generatedActivity: "Actividad Generada",
+      fillParameters: "Completa los parámetros y haz clic en \"Generar\" para comenzar",
+      generatingActivity: "Generando tu actividad personalizada...",
+      downloadCSV: "Descargar CSV",
+      downloadText: "Descargar Texto",
+      buyMeCoffee: "Cómprame un café",
+      selectLanguage: "Selecciona idioma de salida...",
+      workgroups: "Grupos de Trabajo (opcional)",
+      workgroupsPlaceholder: "ej. 3 grupos de 5 personas, parejas, trabajo individual...",
+      purposes: ['Relajación', 'Energización', 'Conexión', 'Movimiento Corporal', 'Despertar', 'Diversión']
+    },
+    fr: {
+      title: "Générateur de Brise-Glace",
+      subtitle: "Générez des activités engageantes pour briser la glace et dynamiser vos groupes collaboratifs",
+      activityParameters: "Paramètres de l'Activité",
+      duration: "Durée Idéale (minutes)",
+      people: "Nombre de Participants",
+      purpose: "Objectif (max 2 sélections)",
+      customPurpose1: "Objectif personnalisé 1",
+      customPurpose2: "Objectif personnalisé 2",
+      desiredOutcome: "Résultat Souhaité (optionnel)",
+      requiredMaterials: "Matériels Requis (optionnel)",
+      additionalNotes: "Quoi d'autre ? (optionnel)",
+      languageSettings: "Paramètres de Langue",
+      interfaceLanguage: "Langue de l'Interface",
+      outputLanguage: "Langue de Sortie",
+      activityOptions: "Options d'Activité",
+      timeBreakdown: "Inclure une répartition temporelle détaillée",
+      timeBreakdownDesc: "Diviser la durée en phases (préparation, activité principale, partage, etc.)",
+      generate: "Générer",
+      update: "Mettre à jour",
+      generating: "Génération...",
+      parametersChanged: "Paramètres modifiés - cliquez sur Mettre à jour pour régénérer",
+      generatedActivity: "Activité Générée",
+      fillParameters: "Remplissez les paramètres et cliquez sur \"Générer\" pour commencer",
+      generatingActivity: "Génération de votre activité personnalisée...",
+      downloadCSV: "Télécharger CSV",
+      downloadText: "Télécharger Texte",
+      buyMeCoffee: "Payez-moi un café",
+      selectLanguage: "Sélectionner la langue de sortie...",
+      workgroups: "Groupes de Travail (optionnel)",
+      workgroupsPlaceholder: "ex. 3 groupes de 5 personnes, paires, travail individuel...",
+      purposes: ['Relaxation', 'Énergisation', 'Connexion', 'Mouvement Corporel', 'Éveil', 'Amusement']
+    },
+    de: {
+      title: "Eisbrecher Generator",
+      subtitle: "Erstelle ansprechende Aktivitäten zum Eisbrechen und zur Energetisierung deiner kollaborativen Gruppen",
+      activityParameters: "Aktivitätsparameter",
+      duration: "Ideale Dauer (Minuten)",
+      people: "Anzahl der Teilnehmer",
+      purpose: "Zweck (max 2 Auswahlen)",
+      customPurpose1: "Benutzerdefinierter Zweck 1",
+      customPurpose2: "Benutzerdefinierter Zweck 2",
+      desiredOutcome: "Gewünschtes Ergebnis (optional)",
+      requiredMaterials: "Erforderliche Materialien (optional)",
+      additionalNotes: "Was sonst noch? (optional)",
+      languageSettings: "Spracheinstellungen",
+      interfaceLanguage: "Interface-Sprache",
+      outputLanguage: "Ausgabesprache",
+      activityOptions: "Aktivitätsoptionen",
+      timeBreakdown: "Detaillierte Zeitaufteilung einschließen",
+      timeBreakdownDesc: "Die Dauer in Phasen aufteilen (Vorbereitung, Hauptaktivität, Teilen, etc.)",
+      generate: "Generieren",
+      update: "Aktualisieren",
+      generating: "Generiere...",
+      parametersChanged: "Parameter geändert - klicken Sie auf Aktualisieren zum Neugenerieren",
+      generatedActivity: "Generierte Aktivität",
+      fillParameters: "Füllen Sie die Parameter aus und klicken Sie auf \"Generieren\" zum Starten",
+      generatingActivity: "Generiere deine personalisierte Aktivität...",
+      downloadCSV: "CSV herunterladen",
+      downloadText: "Text herunterladen",
+      buyMeCoffee: "Kauf mir einen Kaffee",
+      selectLanguage: "Ausgabesprache auswählen...",
+      workgroups: "Arbeitsgruppen (optional)",
+      workgroupsPlaceholder: "z.B. 3 Gruppen à 5 Personen, Paare, Einzelarbeit...",
+      purposes: ['Entspannung', 'Energetisierung', 'Verbindung', 'Körperbewegung', 'Erwachen', 'Spaß']
+    }
+  };
+
+  const t = translations[formData.interfaceLanguage] || translations.en;
+  const predefinedPurposes = t.purposes;
 
   const languages = [
     { code: 'en', name: 'English' },
@@ -132,7 +305,6 @@ const App = () => {
         ? [...prev.purposes, purpose]
         : prev.purposes.filter(p => p !== purpose);
       
-      // Limit to 2 selections
       if (newPurposes.length > 2) {
         return prev;
       }
@@ -159,19 +331,6 @@ const App = () => {
     setIsGenerating(true);
     
     try {
-      // Debug: Check if API key exists
-      console.log('API Key exists:', !!process.env.REACT_APP_ANTHROPIC_API_KEY);
-      console.log('API Key starts with sk-ant:', process.env.REACT_APP_ANTHROPIC_API_KEY?.startsWith('sk-ant'));
-      console.log('API Key length:', process.env.REACT_APP_ANTHROPIC_API_KEY?.length);
-      
-      if (!process.env.REACT_APP_ANTHROPIC_API_KEY) {
-        throw new Error('API key not found. Please check your environment variables in Vercel.');
-      }
-
-      if (!process.env.REACT_APP_ANTHROPIC_API_KEY.startsWith('sk-ant')) {
-        throw new Error('API key format appears incorrect. Should start with sk-ant-api03-');
-      }
-
       const allPurposes = [...formData.purposes];
       if (formData.customPurpose1) allPurposes.push(formData.customPurpose1);
       if (formData.customPurpose2) allPurposes.push(formData.customPurpose2);
@@ -186,26 +345,31 @@ IMPORTANT: Generate the ENTIRE response in ${languageName}. All content includin
 PARAMETERS:
 - Duration: ${formData.duration} minutes
 - Number of participants: ${formData.people} people
+${formData.workgroups ? `- Work groups organization: ${formData.workgroups}` : ''}
 - Purposes: ${allPurposes.join(', ')}
 ${formData.desiredOutcome ? `- Desired outcome: ${formData.desiredOutcome}` : ''}
 ${formData.requiredMaterials ? `- Required materials: ${formData.requiredMaterials}` : ''}
 ${formData.additionalNotes ? `- Additional notes: ${formData.additionalNotes}` : ''}
 - Output language: ${languageName}
+- Include time breakdown: ${formData.includeTimeBreakdown ? 'Yes' : 'No'}
 
 REQUIRED STRUCTURE:
 **ACTIVITY TITLE** (in ${languageName})
+
+**BRIEF DESCRIPTION/NOTES** (in ${languageName})
+[One-sentence description of the activity's essence - place this immediately after the title]
 
 **OBJECTIVE** (in ${languageName})
 [Brief description of specific objectives]
 
 **DURATION** (in ${languageName})
-[Estimated time and phase breakdown if necessary]
+${formData.includeTimeBreakdown ? '[Estimated time with detailed phase breakdown - e.g., 2 min setup, 5 min main activity, 3 min sharing]' : '[Total estimated time only]'}
 
 **PARTICIPANTS** (in ${languageName})
 [Guidelines on number and arrangement]
 
 **MATERIALS** (in ${languageName})
-[List of necessary materials, even if minimal]
+[List of necessary materials with specific usage. Be logical: if you mention post-it notes and markers, explain if markers are FOR the post-its or separate. If stones and post-its are listed, clarify whether to write ON stones or use post-its separately]
 
 **STEP-BY-STEP INSTRUCTIONS** (in ${languageName})
 1. [First step]
@@ -213,38 +377,28 @@ REQUIRED STRUCTURE:
 [etc.]
 
 **VARIATIONS/ADAPTATIONS** (in ${languageName})
-[Suggestions for modifying the activity based on context]
+[Provide 2-3 SPECIFIC variations with clear instructions, not vague suggestions. For example: "For larger groups (20+): divide into teams of 4-5 instead of pairs" rather than "adapt for larger groups"]
 
 **FACILITATION TIPS** (in ${languageName})
-[Advice for those conducting the activity]
+[Maximum 4-5 SPECIFIC and CONTEXTUAL tips directly related to THIS activity, not generic facilitation advice]
 
-Generate an innovative, engaging activity suitable for professional facilitation contexts. Be creative but practical. Remember: ALL content must be written in ${languageName}.`;
+Generate an innovative, engaging activity suitable for professional facilitation contexts. Be creative but practical. When describing materials usage, be logical and specific about how each item is used. Remember: ALL content must be written in ${languageName}.`;
 
-      console.log('Making API request via proxy...');
-
-      const response = await fetch("/api/generate", {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: prompt
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 2000,
+          messages: [
+            { role: "user", content: prompt }
+          ]
         })
       });
 
-      console.log('Response received:', response);
-
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
       const data = await response.json();
-      console.log('Response data:', data);
-      
-      if (!response.ok) {
-        console.error('API Response Error:', data);
-        throw new Error(`API Error ${response.status}: ${data.error?.message || JSON.stringify(data)}`);
-      }
-      
       const generatedActivity = data.content[0].text;
       
       setOutput(generatedActivity);
@@ -253,8 +407,8 @@ Generate an innovative, engaging activity suitable for professional facilitation
       setInitialFormData({...formData});
       
     } catch (error) {
-      console.error('Full error details:', error);
-      setOutput(`Error: ${error.message}`);
+      console.error('Error generating activity:', error);
+      setOutput('Error generating activity. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -273,45 +427,69 @@ Generate an innovative, engaging activity suitable for professional facilitation
       const selectedLanguage = languages.find(lang => lang.code === formData.language);
       const languageName = selectedLanguage ? selectedLanguage.name : formData.language;
 
+      // Generate current timestamp
+      const now = new Date();
+      const dateString = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const timeString = now.toTimeString().split(' ')[0]; // HH:MM:SS format
+      
+      const watermark = `
+─────────────────────────────────────
+Generated: ${dateString} ${timeString}
+Icebreaker Generator - https://icebreaker-generator.com
+© ${now.getFullYear()} Marcello Petruzzi
+Support this project: https://www.paypal.com/donate
+─────────────────────────────────────`;
+
       const prompt = format === 'csv' 
         ? `Convert the following icebreaker activity and its parameters into a well-structured CSV format. Create meaningful columns and properly escape any commas or quotes in the content.
 
 ACTIVITY PARAMETERS:
 - Duration: ${formData.duration} minutes
 - Participants: ${formData.people}
+${formData.workgroups ? `- Work groups: ${formData.workgroups}` : ''}
 - Purposes: ${allPurposes.join(', ')}
 - Desired outcome: ${formData.desiredOutcome || 'Not specified'}
 - Required materials: ${formData.requiredMaterials || 'Not specified'}
 - Additional notes: ${formData.additionalNotes || 'None'}
 - Language: ${languageName}
+- Time breakdown included: ${formData.includeTimeBreakdown ? 'Yes' : 'No'}
 
 GENERATED ACTIVITY:
 ${output}
 
 Output ONLY the CSV content with proper headers and formatting. Make it suitable for import into spreadsheet applications.`
-        : `Format the following icebreaker activity into a clean, professional text document suitable for printing or sharing. Use clear headers, proper spacing, and readable formatting.
+        : `Format the following icebreaker activity into a clean, professional text document suitable for printing or sharing.
 
 ACTIVITY PARAMETERS:
 - Duration: ${formData.duration} minutes
 - Participants: ${formData.people}
+${formData.workgroups ? `- Work groups: ${formData.workgroups}` : ''}
 - Purposes: ${allPurposes.join(', ')}
 - Desired outcome: ${formData.desiredOutcome || 'Not specified'}
 - Required materials: ${formData.requiredMaterials || 'Not specified'}
 - Additional notes: ${formData.additionalNotes || 'None'}
 - Language: ${languageName}
+- Time breakdown included: ${formData.includeTimeBreakdown ? 'Yes' : 'No'}
 
 GENERATED ACTIVITY:
 ${output}
 
-Format this as a professional document with clear sections and proper spacing.`;
+Format this as a professional document with clear sections and proper spacing. At the end, add this watermark:
+${watermark}
 
-      const response = await fetch("/api/generate", {
+Structure should be: Activity content first, then the watermark at the bottom.`;
+
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prompt: prompt
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 2000,
+          messages: [
+            { role: "user", content: prompt }
+          ]
         })
       });
 
@@ -353,100 +531,200 @@ Format this as a professional document with clear sections and proper spacing.`;
   };
 
   const openBuyMeACoffee = () => {
-    window.open('https://www.buymeacoffee.com/yourhandle', '_blank');
+    window.open('https://www.paypal.com/donate', '_blank');
   };
 
   const canGenerate = validateForm();
-  const buttonText = hasGenerated ? 'Update' : 'Generate';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen icebreaker-app">
       {/* Header */}
-      <div className="header-gradient">
-        <div className="header-overlay"></div>
-        <div className="header-content">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Icebreaker Generator
+      <div className="app-header">
+        <div className="header-overlay-1"></div>
+        <div className="header-overlay-2"></div>
+        
+        <div className="relative z-10 container mx-auto px-6 py-12 h-full flex flex-col justify-center">
+          <h1 className="app-title fade-in">
+            {t.title}
           </h1>
-          <p className="text-xl text-blue-100">
-            Generate engaging activities to break the ice and energize your working groups
+          <p className="app-subtitle fade-in">
+            {t.subtitle}
           </p>
         </div>
+        
+        {/* Organic shapes */}
+        <div className="header-shape-1"></div>
+        <div className="header-shape-2"></div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 h-full">
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
           {/* Left Column - Parameters */}
-          <div className="flex flex-col">
-            <div className="bg-white rounded-2xl shadow-lg p-6 flex-1">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <Target className="w-6 h-6 text-indigo-600" />
-                Activity Parameters
+          <div className="fade-in">
+            <div className="form-panel">
+              <h2 className="panel-title">
+                <div className="icon-container icon-target">
+                  <Target className="w-6 h-6" />
+                </div>
+                {t.activityParameters}
               </h2>
 
-              <div className="space-y-4">
-                {/* Duration */}
+              <div className="space-y-6">
+                {/* Language Selection - FIRST */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Clock className="w-4 h-4" />
-                    Ideal Duration (minutes) *
+                  <label className="field-label">
+                    <Globe className="w-4 h-4" />
+                    {t.languageSettings} *
                   </label>
-                  <input
-                    type="number"
-                    value={formData.duration}
-                    onChange={(e) => handleInputChange('duration', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    placeholder="e.g. 15"
-                    min="1"
-                  />
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="sub-label">
+                        {t.interfaceLanguage}
+                      </label>
+                      <select
+                        value={formData.interfaceLanguage}
+                        onChange={(e) => handleInputChange('interfaceLanguage', e.target.value)}
+                        className="form-input text-sm"
+                      >
+                        <option value="en">English</option>
+                        <option value="it">Italiano</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="sub-label">
+                        {t.outputLanguage} *
+                      </label>
+                      <select
+                        value={formData.language}
+                        onChange={(e) => handleInputChange('language', e.target.value)}
+                        className="form-input text-sm"
+                      >
+                        <option value="">{t.selectLanguage}</option>
+                        {languages.map(lang => (
+                          <option key={lang.code} value={lang.code}>
+                            {lang.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
-                {/* People */}
+                {/* Duration and People - Same Row */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Users className="w-4 h-4" />
-                    Number of Participants *
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.people}
-                    onChange={(e) => handleInputChange('people', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                    placeholder="e.g. 12"
-                    min="1"
-                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="field-label">
+                        <Clock className="w-4 h-4" />
+                        {t.duration} *
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.duration}
+                        onChange={(e) => handleInputChange('duration', e.target.value)}
+                        className="form-input"
+                        placeholder="e.g. 15"
+                        min="1"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="field-label">
+                        <Users className="w-4 h-4" />
+                        {t.people} *
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.people}
+                        onChange={(e) => handleInputChange('people', e.target.value)}
+                        className="form-input"
+                        placeholder="e.g. 12"
+                        min="1"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Sub-sections under Duration and People */}
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    {/* Activity Options under Duration */}
+                    <div>
+                      <label className="field-label">
+                        <Clock className="w-4 h-4" />
+                        {t.activityOptions}
+                      </label>
+                      
+                      <div className="space-y-2">
+                        <label className="checkbox-container">
+                          <input
+                            type="checkbox"
+                            checked={formData.includeTimeBreakdown}
+                            onChange={(e) => handleInputChange('includeTimeBreakdown', e.target.checked)}
+                            className="checkbox-input"
+                          />
+                          <div>
+                            <span className="checkbox-label">
+                              {t.timeBreakdown}
+                            </span>
+                            <p className="checkbox-desc">
+                              {t.timeBreakdownDesc}
+                            </p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Work Groups under People */}
+                    <div>
+                      <label className="field-label">
+                        <Users className="w-4 h-4" />
+                        {t.workgroups}
+                      </label>
+                      <textarea
+                        value={formData.workgroups}
+                        onChange={(e) => handleInputChange('workgroups', e.target.value)}
+                        className="form-textarea text-sm"
+                        placeholder={t.workgroupsPlaceholder}
+                        rows="3"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Purpose */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                  <label className="field-label">
                     <Target className="w-4 h-4" />
-                    Purpose (max 2 selections) *
+                    {t.purpose} *
                   </label>
-                  <div className="grid grid-cols-2 gap-2 mb-3">
-                    {predefinedPurposes.map(purpose => (
-                      <label key={purpose} className="flex items-center gap-2 cursor-pointer">
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    {predefinedPurposes.map((purpose, index) => (
+                      <label key={purpose} className={`purpose-option ${formData.purposes.includes(purpose) ? 'purpose-selected' : ''}`}>
                         <input
                           type="checkbox"
                           checked={formData.purposes.includes(purpose)}
                           onChange={(e) => handlePurposeChange(purpose, e.target.checked)}
                           disabled={!formData.purposes.includes(purpose) && 
                             formData.purposes.length + (formData.customPurpose1 ? 1 : 0) + (formData.customPurpose2 ? 1 : 0) >= 2}
-                          className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          className="checkbox-input"
                         />
-                        <span className="text-sm text-gray-700">{purpose}</span>
+                        <span className="purpose-text">{purpose}</span>
                       </label>
                     ))}
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <input
                       type="text"
                       value={formData.customPurpose1}
                       onChange={(e) => handleInputChange('customPurpose1', e.target.value)}
                       disabled={!formData.customPurpose1 && 
                         formData.purposes.length + (formData.customPurpose2 ? 1 : 0) >= 2}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-100"
-                      placeholder="Custom purpose 1"
+                      className="form-input text-sm"
+                      placeholder={t.customPurpose1}
                     />
                     <input
                       type="text"
@@ -454,100 +732,80 @@ Format this as a professional document with clear sections and proper spacing.`;
                       onChange={(e) => handleInputChange('customPurpose2', e.target.value)}
                       disabled={!formData.customPurpose2 && 
                         formData.purposes.length + (formData.customPurpose1 ? 1 : 0) >= 2}
-                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:bg-gray-100"
-                      placeholder="Custom purpose 2"
+                      className="form-input text-sm"
+                      placeholder={t.customPurpose2}
                     />
                   </div>
                 </div>
 
                 {/* Desired Outcome */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <label className="field-label">
                     <Target className="w-4 h-4" />
-                    Desired Outcome (optional)
+                    {t.desiredOutcome}
                   </label>
                   <textarea
                     value={formData.desiredOutcome}
                     onChange={(e) => handleInputChange('desiredOutcome', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="form-textarea"
                     placeholder="e.g. Highlight team skills, create a shared map..."
-                    rows="2"
+                    rows="3"
                   />
                 </div>
 
                 {/* Required Materials */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <label className="field-label">
                     <Package className="w-4 h-4" />
-                    Required Materials (optional)
+                    {t.requiredMaterials}
                   </label>
                   <textarea
                     value={formData.requiredMaterials}
                     onChange={(e) => handleInputChange('requiredMaterials', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="form-textarea"
                     placeholder="e.g. Post-it notes, markers, 20-meter rope..."
-                    rows="2"
+                    rows="3"
                   />
                 </div>
 
                 {/* Additional Notes */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <label className="field-label">
                     <Edit3 className="w-4 h-4" />
-                    What else? (optional)
+                    {t.additionalNotes}
                   </label>
                   <textarea
                     value={formData.additionalNotes}
                     onChange={(e) => handleInputChange('additionalNotes', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="form-textarea"
                     placeholder="Add details, specific context, particular requirements..."
-                    rows="3"
+                    rows="4"
                   />
-                </div>
-
-                {/* Language */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Globe className="w-4 h-4" />
-                    Language *
-                  </label>
-                  <select
-                    value={formData.language}
-                    onChange={(e) => handleInputChange('language', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  >
-                    <option value="">Select a language...</option>
-                    {languages.map(lang => (
-                      <option key={lang.code} value={lang.code}>
-                        {lang.name}
-                      </option>
-                    ))}
-                  </select>
                 </div>
 
                 {/* Generate Button */}
                 <button
                   onClick={generateActivity}
                   disabled={!canGenerate || isGenerating}
-                  className={`w-full py-3 px-6 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
+                  className={`generate-btn ${
                     canGenerate && !isGenerating
                       ? hasGenerated && formChanged
-                        ? 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg hover:shadow-xl'
-                        : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        ? 'btn-update'
+                        : 'btn-primary'
+                      : 'btn-disabled'
                   }`}
                 >
                   {isGenerating ? (
-                    <RefreshCw className="w-5 h-5 animate-spin" />
+                    <RefreshCw className="w-5 h-5 spinner" />
                   ) : (
                     <Play className="w-5 h-5" />
                   )}
-                  {isGenerating ? 'Generating...' : buttonText}
+                  {isGenerating ? t.generating : (hasGenerated ? t.update : t.generate)}
                 </button>
                 
                 {hasGenerated && formChanged && (
-                  <p className="text-sm text-orange-600 text-center">
-                    Parameters changed - click Update to regenerate
+                  <p className="change-notice">
+                    {t.parametersChanged}
                   </p>
                 )}
               </div>
@@ -555,34 +813,45 @@ Format this as a professional document with clear sections and proper spacing.`;
           </div>
 
           {/* Right Column - Output */}
-          <div className="flex flex-col">
-            <div className="bg-white rounded-2xl shadow-lg p-6 flex-1 flex flex-col">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                Generated Activity
+          <div className="fade-in">
+            <div className="output-panel">
+              <h2 className="panel-title">
+                <div className="icon-container icon-message">
+                  <MessageSquare className="w-6 h-6" />
+                </div>
+                {t.generatedActivity}
               </h2>
               
               <div className="flex-1 flex flex-col">
                 {!hasGenerated && !isGenerating && (
-                  <div className="flex-1 flex items-center justify-center text-gray-500">
+                  <div className="empty-state">
                     <div className="text-center">
-                      <Play className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                      <p className="text-lg">Fill in the parameters and click "Generate" to start</p>
+                      <div className="empty-icon">
+                        <Play className="w-16 h-16 mx-auto" />
+                      </div>
+                      <p className="empty-text">
+                        {t.fillParameters}
+                      </p>
                     </div>
                   </div>
                 )}
 
                 {isGenerating && (
-                  <div className="flex-1 flex items-center justify-center">
+                  <div className="loading-state">
                     <div className="text-center">
-                      <RefreshCw className="w-16 h-16 mx-auto mb-4 text-indigo-600 animate-spin" />
-                      <p className="text-lg text-gray-600">Generating your personalized activity...</p>
+                      <div className="loading-icon">
+                        <RefreshCw className="w-16 h-16 mx-auto spinner" />
+                      </div>
+                      <p className="loading-text">
+                        {t.generatingActivity}
+                      </p>
                     </div>
                   </div>
                 )}
 
                 {output && !isGenerating && (
                   <div className="flex-1 overflow-auto">
-                    <div className="whitespace-pre-wrap text-sm bg-gray-50 p-4 rounded-lg border h-full">
+                    <div className="output-content">
                       {output}
                     </div>
                   </div>
@@ -591,40 +860,40 @@ Format this as a professional document with clear sections and proper spacing.`;
 
               {/* Action Buttons */}
               {hasGenerated && !isGenerating && (
-                <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="action-buttons">
                   <div className="flex flex-wrap gap-3">
                     <button
                       onClick={downloadCSV}
                       disabled={isDownloading}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
+                      className="action-btn btn-csv"
                     >
                       {isDownloading ? (
-                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <RefreshCw className="w-4 h-4 spinner" />
                       ) : (
                         <Download className="w-4 h-4" />
                       )}
-                      Download CSV
+                      {t.downloadCSV}
                     </button>
                     
                     <button
                       onClick={downloadText}
                       disabled={isDownloading}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
+                      className="action-btn btn-text"
                     >
                       {isDownloading ? (
-                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <RefreshCw className="w-4 h-4 spinner" />
                       ) : (
                         <Download className="w-4 h-4" />
                       )}
-                      Download Text
+                      {t.downloadText}
                     </button>
                     
                     <button
                       onClick={openBuyMeACoffee}
-                      className="flex items-center gap-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-medium transition-colors ml-auto"
+                      className="action-btn btn-coffee ml-auto"
                     >
                       <Coffee className="w-4 h-4" />
-                      Buy me a coffee
+                      {t.buyMeCoffee}
                     </button>
                   </div>
                 </div>
@@ -637,4 +906,4 @@ Format this as a professional document with clear sections and proper spacing.`;
   );
 };
 
-export default App;
+export default IcebreakerGenerator;
