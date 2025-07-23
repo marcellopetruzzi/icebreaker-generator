@@ -1,5 +1,14 @@
 export default async function handler(req, res) {
-  // Only allow POST requests
+  // Add CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -20,6 +29,11 @@ export default async function handler(req, res) {
     // Validate required fields
     if (!duration || !people || !purposes || !languageName) {
       return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Check if API key exists
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return res.status(500).json({ error: "API key not configured" });
     }
 
     // Construct the prompt
@@ -89,12 +103,17 @@ Generate an innovative, engaging activity suitable for professional facilitation
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
       console.error(
         "Anthropic API error:",
         response.status,
-        response.statusText
+        response.statusText,
+        errorText
       );
-      throw new Error(`Anthropic API error: ${response.status}`);
+      return res.status(500).json({
+        error: `Anthropic API error: ${response.status}`,
+        details: errorText,
+      });
     }
 
     const data = await response.json();
