@@ -1,0 +1,8 @@
+.App {
+  text-align: left;
+}
+
+/* Remove any default create-react-app styles that might interfere */
+.App * {
+  box-sizing: border-box;
+}
