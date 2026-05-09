@@ -1,4 +1,4 @@
-claude-sonnet-4-6export default async function handler(req, res) {
+export default async function handler(req, res) {
   // Add CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST");
