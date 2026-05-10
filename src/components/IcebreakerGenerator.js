@@ -566,7 +566,7 @@ const IcebreakerGenerator = () => {
   };
 
   const openTipDeveloper = () => {
-    window.open("https://www.paypal.com/donate", "_blank");
+    window.open("https://www.paypal.com/paypalme/MarcelloPetruzzi", "_blank");
   };
 
   const canGenerate = validateForm();
