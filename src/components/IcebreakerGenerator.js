@@ -1026,8 +1026,7 @@ const IcebreakerGenerator = () => {
                   </div>
                 )}
 
-                {output && !isGenerating && (
-                  {showPaywall && (
+                {showPaywall && (
                   <div className="paywall-screen">
                     <h3 className="paywall-title">{t.paywallTitle}</h3>
                     <p className="paywall-subtitle">{t.paywallSubtitle}</p>
