@@ -437,6 +437,7 @@ const IcebreakerGenerator = () => {
         ? selectedLanguage.name
         : formData.language;
 
+      // eslint-disable-next-line no-unused-vars
       const _prompt = `As an expert collaborative process facilitator, generate a personalized icebreaker/energizer with these parameters:
 
 IMPORTANT: Generate the ENTIRE response in ${languageName}. All content including titles, instructions, and explanations must be in ${languageName}.
