@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Download,
-  Heart,
+  Coffee,
   RefreshCw,
   Play,
   Users,
@@ -35,7 +35,6 @@ const IcebreakerGenerator = () => {
   const [formChanged, setFormChanged] = useState(false);
   const [initialFormData, setInitialFormData] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   // Translations object
   const translations = {
@@ -69,13 +68,12 @@ const IcebreakerGenerator = () => {
       downloadCSV: "Download CSV",
       downloadText: "Download Text",
       tipDeveloper: "Satisfied with the result? Tip the developer",
+      timeoutError: "The generation took too long. Please try again.",
+      genericError: "An error occurred while generating. Please try again.",
       selectLanguage: "Select output language...",
       workgroups: "Work Groups (optional)",
       workgroupsPlaceholder:
         "e.g. 3 groups of 5 people, pairs, individual work...",
-      timeoutError: "The generation took too long. Please try again.",
-      genericError:
-        "An error occurred while generating the activity. Please try again.",
       purposes: [
         "Relaxation",
         "Energization",
@@ -116,13 +114,13 @@ const IcebreakerGenerator = () => {
       downloadText: "Scarica Testo",
       tipDeveloper:
         "Soddisfatto del risultato? Offri una mancia allo sviluppatore",
+      timeoutError: "La generazione ha impiegato troppo tempo. Riprova.",
+      genericError:
+        "Si è verificato un errore durante la generazione. Riprova.",
       selectLanguage: "Seleziona lingua di output...",
       workgroups: "Sottogruppi di Lavoro (opzionale)",
       workgroupsPlaceholder:
         "es. 3 gruppi da 5 persone, coppie, lavoro individuale...",
-      timeoutError: "La generazione ha impiegato troppo tempo. Riprova.",
-      genericError:
-        "Si è verificato un errore durante la generazione. Riprova.",
       purposes: [
         "Rilassamento",
         "Energizzazione",
@@ -165,14 +163,14 @@ const IcebreakerGenerator = () => {
       downloadText: "Descargar Texto",
       tipDeveloper:
         "¿Satisfecho con el resultado? Dale una propina al desarrollador",
+      timeoutError:
+        "La generación tardó demasiado. Por favor, inténtalo de nuevo.",
+      genericError:
+        "Se produjo un error al generar. Por favor, inténtalo de nuevo.",
       selectLanguage: "Selecciona idioma de salida...",
       workgroups: "Grupos de Trabajo (opcional)",
       workgroupsPlaceholder:
         "ej. 3 grupos de 5 personas, parejas, trabajo individual...",
-      timeoutError:
-        "La generación tardó demasiado. Por favor, inténtalo de nuevo.",
-      genericError:
-        "Se produjo un error al generar la actividad. Por favor, inténtalo de nuevo.",
       purposes: [
         "Relajación",
         "Energización",
@@ -215,13 +213,13 @@ const IcebreakerGenerator = () => {
       downloadText: "Télécharger Texte",
       tipDeveloper:
         "Satisfait du résultat ? Donnez un pourboire au développeur",
+      timeoutError: "La génération a pris trop de temps. Veuillez réessayer.",
+      genericError:
+        "Une erreur s'est produite lors de la génération. Veuillez réessayer.",
       selectLanguage: "Sélectionner la langue de sortie...",
       workgroups: "Groupes de Travail (optionnel)",
       workgroupsPlaceholder:
         "ex. 3 groupes de 5 personnes, paires, travail individuel...",
-      timeoutError: "La génération a pris trop de temps. Veuillez réessayer.",
-      genericError:
-        "Une erreur s'est produite lors de la génération. Veuillez réessayer.",
       purposes: [
         "Relaxation",
         "Énergisation",
@@ -264,14 +262,14 @@ const IcebreakerGenerator = () => {
       downloadText: "Text herunterladen",
       tipDeveloper:
         "Mit dem Ergebnis zufrieden? Geben Sie dem Entwickler ein Trinkgeld",
-      selectLanguage: "Ausgabesprache auswählen...",
-      workgroups: "Arbeitsgruppen (optional)",
-      workgroupsPlaceholder:
-        "z.B. 3 Gruppen à 5 Personen, Paare, Einzelarbeit...",
       timeoutError:
         "Die Generierung hat zu lange gedauert. Bitte versuche es erneut.",
       genericError:
         "Bei der Generierung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+      selectLanguage: "Ausgabesprache auswählen...",
+      workgroups: "Arbeitsgruppen (optional)",
+      workgroupsPlaceholder:
+        "z.B. 3 Gruppen à 5 Personen, Paare, Einzelarbeit...",
       purposes: [
         "Entspannung",
         "Energetisierung",
@@ -423,7 +421,6 @@ const IcebreakerGenerator = () => {
     if (!validateForm()) return;
 
     setIsGenerating(true);
-    setIsError(false);
 
     try {
       const allPurposes = [...formData.purposes];
@@ -437,8 +434,7 @@ const IcebreakerGenerator = () => {
         ? selectedLanguage.name
         : formData.language;
 
-      // eslint-disable-next-line no-unused-vars
-      const _prompt = `As an expert collaborative process facilitator, generate a personalized icebreaker/energizer with these parameters:
+      const prompt = `As an expert collaborative process facilitator, generate a personalized icebreaker/energizer with these parameters:
 
 IMPORTANT: Generate the ENTIRE response in ${languageName}. All content including titles, instructions, and explanations must be in ${languageName}.
 
@@ -484,19 +480,15 @@ ${formData.includeTimeBreakdown ? "[Estimated time with detailed phase breakdown
 
 Generate an innovative, engaging activity suitable for professional facilitation contexts. Be creative but practical. When describing materials usage, be logical and specific about how each item is used. Remember: ALL content must be written in ${languageName}.`;
 
-      const response = await fetch("/api/generate", {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          duration: formData.duration,
-          people: formData.people,
-          workgroups: formData.workgroups,
-          purposes: allPurposes,
-          desiredOutcome: formData.desiredOutcome,
-          requiredMaterials: formData.requiredMaterials,
-          additionalNotes: formData.additionalNotes,
-          languageName,
-          includeTimeBreakdown: formData.includeTimeBreakdown,
+          model: "claude-sonnet-4-6",
+          max_tokens: 2000,
+          messages: [{ role: "user", content: prompt }],
         }),
       });
 
@@ -509,16 +501,14 @@ Generate an innovative, engaging activity suitable for professional facilitation
       }
 
       const data = await response.json();
-      const generatedActivity = data.activity || data.content?.[0]?.text || "";
+      const generatedActivity = data.content[0].text;
 
       setOutput(generatedActivity);
       setHasGenerated(true);
       setFormChanged(false);
       setInitialFormData({ ...formData });
-      setIsError(false);
     } catch (error) {
       console.error("Error generating activity:", error);
-      setIsError(true);
       if (
         error.message === "timeout" ||
         error.message.includes("504") ||
@@ -602,16 +592,20 @@ ${watermark}
 
 Structure should be: Activity content first, then the watermark at the bottom.`;
 
-      const response = await fetch("/api/download", {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, format }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 2000,
+          messages: [{ role: "user", content: prompt }],
+        }),
       });
 
-      if (!response.ok)
-        throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      return data.content || "";
+      return data.content[0].text;
     } catch (error) {
       console.error("Error generating download content:", error);
       return null;
@@ -660,6 +654,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
         fontFamily: "DM Sans, system-ui, sans-serif",
       }}
     >
+      {/* Custom CSS Variables */}
       <style>{`
         :root {
           --ecru-white: #f4f0e4;
@@ -669,46 +664,46 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
           --pueblo: #842813;
           --gray: #615D55;
         }
-
+        
         .custom-input {
           transition: all 0.3s ease;
           border: 1.5px solid rgba(97, 93, 85, 0.2);
         }
-
+        
         .custom-input:focus {
           border-color: var(--chalet-green);
           box-shadow: 0 0 0 3px rgba(65, 102, 49, 0.1);
           outline: none;
         }
-
+        
         .custom-btn {
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
         }
-
+        
         .custom-btn:hover {
           transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-
+        
         .custom-btn:active {
           transform: translateY(0);
         }
-
+        
         .fade-in {
           animation: fadeIn 0.6s ease-out;
         }
-
+        
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .spinner {
           animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
@@ -761,6 +756,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
           </p>
         </div>
 
+        {/* Organic shapes */}
         <div
           className="absolute top-12 right-12 w-32 h-32 rounded-full opacity-20"
           style={{
@@ -805,7 +801,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
               </h2>
 
               <div className="space-y-6">
-                {/* Language Selection */}
+                {/* Language Selection - FIRST */}
                 <div>
                   <label
                     className="flex items-center gap-2 text-sm font-semibold mb-4"
@@ -868,7 +864,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                   </div>
                 </div>
 
-                {/* Duration and People */}
+                {/* Duration and People - Same Row */}
                 <div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -920,8 +916,9 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                     </div>
                   </div>
 
+                  {/* Sub-sections under Duration and People */}
                   <div className="grid grid-cols-2 gap-4 mt-4">
-                    {/* Activity Options */}
+                    {/* Activity Options under Duration */}
                     <div>
                       <label
                         className="flex items-center gap-2 text-sm font-semibold mb-3"
@@ -971,7 +968,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                       </div>
                     </div>
 
-                    {/* Work Groups */}
+                    {/* Work Groups under People */}
                     <div>
                       <label
                         className="flex items-center gap-2 text-sm font-semibold mb-3"
@@ -1010,7 +1007,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                     {t.purpose} *
                   </label>
                   <div className="grid grid-cols-2 gap-3 mb-4">
-                    {predefinedPurposes.map((purpose) => (
+                    {predefinedPurposes.map((purpose, index) => (
                       <label
                         key={purpose}
                         className="flex items-center gap-3 cursor-pointer p-3 rounded-lg transition-all hover:bg-opacity-50"
@@ -1159,7 +1156,9 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                   disabled={!canGenerate || isGenerating}
                   className={`w-full py-4 px-6 rounded-xl font-semibold flex items-center justify-center gap-3 custom-btn text-lg ${
                     canGenerate && !isGenerating
-                      ? "shadow-lg"
+                      ? hasGenerated && formChanged
+                        ? "shadow-lg"
+                        : "shadow-lg"
                       : "cursor-not-allowed opacity-50"
                   }`}
                   style={{
@@ -1268,13 +1267,9 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                     <div
                       className="whitespace-pre-wrap text-sm p-6 rounded-2xl h-full"
                       style={{
-                        backgroundColor: isError
-                          ? "rgba(132, 40, 19, 0.04)"
-                          : "rgba(97, 93, 85, 0.03)",
-                        border: isError
-                          ? "1px solid rgba(132, 40, 19, 0.2)"
-                          : "1px solid rgba(97, 93, 85, 0.1)",
-                        color: isError ? "var(--pueblo)" : "var(--zeus)",
+                        backgroundColor: "rgba(97, 93, 85, 0.03)",
+                        border: "1px solid rgba(97, 93, 85, 0.1)",
+                        color: "var(--zeus)",
                         lineHeight: "1.6",
                       }}
                     >
@@ -1285,7 +1280,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
               </div>
 
               {/* Action Buttons */}
-              {hasGenerated && !isGenerating && !isError && (
+              {hasGenerated && !isGenerating && (
                 <div
                   className="mt-8 pt-6"
                   style={{ borderTop: "1px solid rgba(97, 93, 85, 0.1)" }}
@@ -1333,7 +1328,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
                         color: "white",
                       }}
                     >
-                      <Heart className="w-4 h-4" />
+                      <Coffee className="w-4 h-4" />
                       {t.tipDeveloper}
                     </button>
                   </div>
