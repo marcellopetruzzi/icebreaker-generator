@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 Generated: ${dateString} ${timeString}
 Icebreaker Generator - https://icebreaker-generator.vercel.app
 © ${now.getFullYear()} Marcello Petruzzi
-Support this project: https://www.paypal.com/donate
+Support this project: https://www.paypal.com/paypalme/MarcelloPetruzzi
 ─────────────────────────────────────`;
 
     const prompt =
@@ -73,7 +73,7 @@ Structure should be: Activity content first, then the watermark at the bottom.`;
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-sonnet-4-6",
         max_tokens: 2000,
         messages: [{ role: "user", content: prompt }],
       }),
