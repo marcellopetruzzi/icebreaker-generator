@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Download,
-  Coffee,
+  Heart,
   RefreshCw,
   Play,
   Users,
@@ -35,7 +35,7 @@ const IcebreakerGenerator = () => {
   const [formChanged, setFormChanged] = useState(false);
   const [initialFormData, setInitialFormData] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [error, setError] = useState("");
+  const [isError, setIsError] = useState(false);
 
   // Translations object
   const translations = {
@@ -68,11 +68,14 @@ const IcebreakerGenerator = () => {
       generatingActivity: "Generating your personalized activity...",
       downloadCSV: "Download CSV",
       downloadText: "Download Text",
-      buyMeCoffee: "Buy me a coffee",
+      tipDeveloper: "Satisfied with the result? Tip the developer",
       selectLanguage: "Select output language...",
       workgroups: "Work Groups (optional)",
       workgroupsPlaceholder:
         "e.g. 3 groups of 5 people, pairs, individual work...",
+      timeoutError: "The generation took too long. Please try again.",
+      genericError:
+        "An error occurred while generating the activity. Please try again.",
       purposes: [
         "Relaxation",
         "Energization",
@@ -81,10 +84,6 @@ const IcebreakerGenerator = () => {
         "Awakening",
         "Fun",
       ],
-      errorGeneral:
-        "An error occurred while generating the activity. Please try again.",
-      errorNetwork:
-        "Network error. Please check your connection and try again.",
     },
     it: {
       title: "Generatore di Icebreaker",
@@ -115,11 +114,15 @@ const IcebreakerGenerator = () => {
       generatingActivity: "Generando la tua attività personalizzata...",
       downloadCSV: "Scarica CSV",
       downloadText: "Scarica Testo",
-      buyMeCoffee: "Offrimi un caffè",
+      tipDeveloper:
+        "Soddisfatto del risultato? Offri una mancia allo sviluppatore",
       selectLanguage: "Seleziona lingua di output...",
       workgroups: "Sottogruppi di Lavoro (opzionale)",
       workgroupsPlaceholder:
         "es. 3 gruppi da 5 persone, coppie, lavoro individuale...",
+      timeoutError: "La generazione ha impiegato troppo tempo. Riprova.",
+      genericError:
+        "Si è verificato un errore durante la generazione. Riprova.",
       purposes: [
         "Rilassamento",
         "Energizzazione",
@@ -128,9 +131,6 @@ const IcebreakerGenerator = () => {
         "Risveglio",
         "Divertimento",
       ],
-      errorGeneral:
-        "Si è verificato un errore durante la generazione dell'attività. Riprova.",
-      errorNetwork: "Errore di rete. Controlla la connessione e riprova.",
     },
     es: {
       title: "Generador de Rompe Hielos",
@@ -163,11 +163,16 @@ const IcebreakerGenerator = () => {
       generatingActivity: "Generando tu actividad personalizada...",
       downloadCSV: "Descargar CSV",
       downloadText: "Descargar Texto",
-      buyMeCoffee: "Cómprame un café",
+      tipDeveloper:
+        "¿Satisfecho con el resultado? Dale una propina al desarrollador",
       selectLanguage: "Selecciona idioma de salida...",
       workgroups: "Grupos de Trabajo (opcional)",
       workgroupsPlaceholder:
         "ej. 3 grupos de 5 personas, parejas, trabajo individual...",
+      timeoutError:
+        "La generación tardó demasiado. Por favor, inténtalo de nuevo.",
+      genericError:
+        "Se produjo un error al generar la actividad. Por favor, inténtalo de nuevo.",
       purposes: [
         "Relajación",
         "Energización",
@@ -176,9 +181,6 @@ const IcebreakerGenerator = () => {
         "Despertar",
         "Diversión",
       ],
-      errorGeneral:
-        "Ocurrió un error al generar la actividad. Inténtalo de nuevo.",
-      errorNetwork: "Error de red. Verifica tu conexión e inténtalo de nuevo.",
     },
     fr: {
       title: "Générateur de Brise-Glace",
@@ -211,11 +213,15 @@ const IcebreakerGenerator = () => {
       generatingActivity: "Génération de votre activité personnalisée...",
       downloadCSV: "Télécharger CSV",
       downloadText: "Télécharger Texte",
-      buyMeCoffee: "Payez-moi un café",
+      tipDeveloper:
+        "Satisfait du résultat ? Donnez un pourboire au développeur",
       selectLanguage: "Sélectionner la langue de sortie...",
       workgroups: "Groupes de Travail (optionnel)",
       workgroupsPlaceholder:
         "ex. 3 groupes de 5 personnes, paires, travail individuel...",
+      timeoutError: "La génération a pris trop de temps. Veuillez réessayer.",
+      genericError:
+        "Une erreur s'est produite lors de la génération. Veuillez réessayer.",
       purposes: [
         "Relaxation",
         "Énergisation",
@@ -224,9 +230,6 @@ const IcebreakerGenerator = () => {
         "Éveil",
         "Amusement",
       ],
-      errorGeneral:
-        "Une erreur s'est produite lors de la génération de l'activité. Veuillez réessayer.",
-      errorNetwork: "Erreur réseau. Vérifiez votre connexion et réessayez.",
     },
     de: {
       title: "Eisbrecher Generator",
@@ -259,11 +262,16 @@ const IcebreakerGenerator = () => {
       generatingActivity: "Generiere deine personalisierte Aktivität...",
       downloadCSV: "CSV herunterladen",
       downloadText: "Text herunterladen",
-      buyMeCoffee: "Kauf mir einen Kaffee",
+      tipDeveloper:
+        "Mit dem Ergebnis zufrieden? Geben Sie dem Entwickler ein Trinkgeld",
       selectLanguage: "Ausgabesprache auswählen...",
       workgroups: "Arbeitsgruppen (optional)",
       workgroupsPlaceholder:
         "z.B. 3 Gruppen à 5 Personen, Paare, Einzelarbeit...",
+      timeoutError:
+        "Die Generierung hat zu lange gedauert. Bitte versuche es erneut.",
+      genericError:
+        "Bei der Generierung ist ein Fehler aufgetreten. Bitte versuche es erneut.",
       purposes: [
         "Entspannung",
         "Energetisierung",
@@ -272,10 +280,6 @@ const IcebreakerGenerator = () => {
         "Erwachen",
         "Spaß",
       ],
-      errorGeneral:
-        "Ein Fehler ist beim Generieren der Aktivität aufgetreten. Bitte versuchen Sie es erneut.",
-      errorNetwork:
-        "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
     },
   };
 
@@ -384,7 +388,6 @@ const IcebreakerGenerator = () => {
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    if (error) setError(""); // Clear error when user makes changes
   };
 
   const handlePurposeChange = (purpose, checked) => {
@@ -416,34 +419,11 @@ const IcebreakerGenerator = () => {
     return totalPurposes > 0;
   };
 
-  // API call function - will be moved to backend endpoint
-  const callAPI = async (endpoint, data) => {
-    try {
-      const response = await fetch(`/api/${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error("API Error:", error);
-      throw error;
-    }
-  };
-
   const generateActivity = async () => {
     if (!validateForm()) return;
 
     setIsGenerating(true);
-    setError("");
+    setIsError(false);
 
     try {
       const allPurposes = [...formData.purposes];
@@ -451,35 +431,102 @@ const IcebreakerGenerator = () => {
       if (formData.customPurpose2) allPurposes.push(formData.customPurpose2);
 
       const selectedLanguage = languages.find(
-        (lang) => lang.code === formData.language
+        (lang) => lang.code === formData.language,
       );
       const languageName = selectedLanguage
         ? selectedLanguage.name
         : formData.language;
 
-      const requestData = {
-        duration: formData.duration,
-        people: formData.people,
-        workgroups: formData.workgroups,
-        purposes: allPurposes,
-        desiredOutcome: formData.desiredOutcome,
-        requiredMaterials: formData.requiredMaterials,
-        additionalNotes: formData.additionalNotes,
-        languageName: languageName,
-        includeTimeBreakdown: formData.includeTimeBreakdown,
-      };
+      const prompt = `As an expert collaborative process facilitator, generate a personalized icebreaker/energizer with these parameters:
 
-      const result = await callAPI("generate", requestData);
+IMPORTANT: Generate the ENTIRE response in ${languageName}. All content including titles, instructions, and explanations must be in ${languageName}.
 
-      setOutput(result.activity);
+PARAMETERS:
+- Duration: ${formData.duration} minutes
+- Number of participants: ${formData.people} people
+${formData.workgroups ? `- Work groups organization: ${formData.workgroups}` : ""}
+- Purposes: ${allPurposes.join(", ")}
+${formData.desiredOutcome ? `- Desired outcome: ${formData.desiredOutcome}` : ""}
+${formData.requiredMaterials ? `- Required materials: ${formData.requiredMaterials}` : ""}
+${formData.additionalNotes ? `- Additional notes: ${formData.additionalNotes}` : ""}
+- Output language: ${languageName}
+- Include time breakdown: ${formData.includeTimeBreakdown ? "Yes" : "No"}
+
+REQUIRED STRUCTURE:
+**ACTIVITY TITLE** (in ${languageName})
+
+**BRIEF DESCRIPTION/NOTES** (in ${languageName})
+[One-sentence description of the activity's essence - place this immediately after the title]
+
+**OBJECTIVE** (in ${languageName})
+[Brief description of specific objectives]
+
+**DURATION** (in ${languageName})
+${formData.includeTimeBreakdown ? "[Estimated time with detailed phase breakdown - e.g., 2 min setup, 5 min main activity, 3 min sharing]" : "[Total estimated time only]"}
+
+**PARTICIPANTS** (in ${languageName})
+[Guidelines on number and arrangement]
+
+**MATERIALS** (in ${languageName})
+[List of necessary materials with specific usage. Be logical: if you mention post-it notes and markers, explain if markers are FOR the post-its or separate. If stones and post-its are listed, clarify whether to write ON stones or use post-its separately]
+
+**STEP-BY-STEP INSTRUCTIONS** (in ${languageName})
+1. [First step]
+2. [Second step]
+[etc.]
+
+**VARIATIONS/ADAPTATIONS** (in ${languageName})
+[Provide 2-3 SPECIFIC variations with clear instructions, not vague suggestions. For example: "For larger groups (20+): divide into teams of 4-5 instead of pairs" rather than "adapt for larger groups"]
+
+**FACILITATION TIPS** (in ${languageName})
+[Maximum 4-5 SPECIFIC and CONTEXTUAL tips directly related to THIS activity, not generic facilitation advice]
+
+Generate an innovative, engaging activity suitable for professional facilitation contexts. Be creative but practical. When describing materials usage, be logical and specific about how each item is used. Remember: ALL content must be written in ${languageName}.`;
+
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          duration: formData.duration,
+          people: formData.people,
+          workgroups: formData.workgroups,
+          purposes: allPurposes,
+          desiredOutcome: formData.desiredOutcome,
+          requiredMaterials: formData.requiredMaterials,
+          additionalNotes: formData.additionalNotes,
+          languageName,
+          includeTimeBreakdown: formData.includeTimeBreakdown,
+        }),
+      });
+
+      if (!response.ok) {
+        const status = response.status;
+        if (status === 504 || status === 408) {
+          throw new Error("timeout");
+        }
+        throw new Error(`HTTP error! status: ${status}`);
+      }
+
+      const data = await response.json();
+      const generatedActivity = data.activity || data.content?.[0]?.text || "";
+
+      setOutput(generatedActivity);
       setHasGenerated(true);
       setFormChanged(false);
       setInitialFormData({ ...formData });
+      setIsError(false);
     } catch (error) {
       console.error("Error generating activity:", error);
-      setError(
-        error.message.includes("fetch") ? t.errorNetwork : t.errorGeneral
-      );
+      setIsError(true);
+      if (
+        error.message === "timeout" ||
+        error.message.includes("504") ||
+        error.message.includes("408")
+      ) {
+        setOutput(t.timeoutError);
+      } else {
+        setOutput(t.genericError);
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -496,33 +543,76 @@ const IcebreakerGenerator = () => {
       if (formData.customPurpose2) allPurposes.push(formData.customPurpose2);
 
       const selectedLanguage = languages.find(
-        (lang) => lang.code === formData.language
+        (lang) => lang.code === formData.language,
       );
       const languageName = selectedLanguage
         ? selectedLanguage.name
         : formData.language;
 
-      const requestData = {
-        format,
-        output,
-        parameters: {
-          duration: formData.duration,
-          people: formData.people,
-          workgroups: formData.workgroups,
-          purposes: allPurposes,
-          desiredOutcome: formData.desiredOutcome,
-          requiredMaterials: formData.requiredMaterials,
-          additionalNotes: formData.additionalNotes,
-          languageName: languageName,
-          includeTimeBreakdown: formData.includeTimeBreakdown,
-        },
-      };
+      const now = new Date();
+      const dateString = now.toISOString().split("T")[0];
+      const timeString = now.toTimeString().split(" ")[0];
 
-      const result = await callAPI("download", requestData);
-      return result.content;
+      const watermark = `
+─────────────────────────────────────
+Generated: ${dateString} ${timeString}
+Icebreaker Generator - https://icebreaker-generator.vercel.app
+© ${now.getFullYear()} Marcello Petruzzi
+Support this project: https://paypal.me/MarcelloPetruzzi
+─────────────────────────────────────`;
+
+      const prompt =
+        format === "csv"
+          ? `Convert the following icebreaker activity and its parameters into a well-structured CSV format. Create meaningful columns and properly escape any commas or quotes in the content.
+
+ACTIVITY PARAMETERS:
+- Duration: ${formData.duration} minutes
+- Participants: ${formData.people}
+${formData.workgroups ? `- Work groups: ${formData.workgroups}` : ""}
+- Purposes: ${allPurposes.join(", ")}
+- Desired outcome: ${formData.desiredOutcome || "Not specified"}
+- Required materials: ${formData.requiredMaterials || "Not specified"}
+- Additional notes: ${formData.additionalNotes || "None"}
+- Language: ${languageName}
+- Time breakdown included: ${formData.includeTimeBreakdown ? "Yes" : "No"}
+
+GENERATED ACTIVITY:
+${output}
+
+Output ONLY the CSV content with proper headers and formatting. Make it suitable for import into spreadsheet applications.`
+          : `Format the following icebreaker activity into a clean, professional text document suitable for printing or sharing.
+
+ACTIVITY PARAMETERS:
+- Duration: ${formData.duration} minutes
+- Participants: ${formData.people}
+${formData.workgroups ? `- Work groups: ${formData.workgroups}` : ""}
+- Purposes: ${allPurposes.join(", ")}
+- Desired outcome: ${formData.desiredOutcome || "Not specified"}
+- Required materials: ${formData.requiredMaterials || "Not specified"}
+- Additional notes: ${formData.additionalNotes || "None"}
+- Language: ${languageName}
+- Time breakdown included: ${formData.includeTimeBreakdown ? "Yes" : "No"}
+
+GENERATED ACTIVITY:
+${output}
+
+Format this as a professional document with clear sections and proper spacing. At the end, add this watermark:
+${watermark}
+
+Structure should be: Activity content first, then the watermark at the bottom.`;
+
+      const response = await fetch("/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, format }),
+      });
+
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      return data.content || "";
     } catch (error) {
       console.error("Error generating download content:", error);
-      setError(t.errorGeneral);
       return null;
     } finally {
       setIsDownloading(false);
@@ -555,64 +645,193 @@ const IcebreakerGenerator = () => {
     }
   };
 
-  const openBuyMeACoffee = () => {
-    window.open("https://www.paypal.com/donate", "_blank");
+  const openTipDeveloper = () => {
+    window.open("https://paypal.me/MarcelloPetruzzi", "_blank");
   };
 
   const canGenerate = validateForm();
 
   return (
-    <div className="app-container">
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: "#f4f0e4",
+        fontFamily: "DM Sans, system-ui, sans-serif",
+      }}
+    >
+      <style>{`
+        :root {
+          --ecru-white: #f4f0e4;
+          --zeus: #211e18;
+          --chalet-green: #416631;
+          --anzac: #ddb349;
+          --pueblo: #842813;
+          --gray: #615D55;
+        }
+
+        .custom-input {
+          transition: all 0.3s ease;
+          border: 1.5px solid rgba(97, 93, 85, 0.2);
+        }
+
+        .custom-input:focus {
+          border-color: var(--chalet-green);
+          box-shadow: 0 0 0 3px rgba(65, 102, 49, 0.1);
+          outline: none;
+        }
+
+        .custom-btn {
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .custom-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-btn:active {
+          transform: translateY(0);
+        }
+
+        .fade-in {
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .spinner {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+
       {/* Header */}
-      <div className="header">
-        <div className="header-background"></div>
-        <div className="header-overlay"></div>
-        <div className="header-content">
-          <h1 className="header-title fade-in">{t.title}</h1>
-          <p className="header-subtitle fade-in">{t.subtitle}</p>
+      <div
+        className="relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #416631 0%, #649a48 50%, #82b566 100%)",
+          height: "280px",
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 30% 20%, rgba(221, 179, 73, 0.3) 0%, transparent 50%)",
+          }}
+        ></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 70% 80%, rgba(132, 40, 19, 0.2) 0%, transparent 50%)",
+          }}
+        ></div>
+
+        <div className="relative z-10 container mx-auto px-6 py-12 h-full flex flex-col justify-center">
+          <h1
+            className="text-5xl font-bold mb-6 fade-in"
+            style={{
+              color: "#f4f0e4",
+              letterSpacing: "0.02em",
+              lineHeight: "1.1",
+            }}
+          >
+            {t.title}
+          </h1>
+          <p
+            className="text-xl max-w-2xl fade-in"
+            style={{
+              color: "rgba(244, 240, 228, 0.9)",
+              lineHeight: "1.6",
+            }}
+          >
+            {t.subtitle}
+          </p>
         </div>
 
-        {/* Organic shapes */}
-        <div className="header-shape-1"></div>
-        <div className="header-shape-2"></div>
+        <div
+          className="absolute top-12 right-12 w-32 h-32 rounded-full opacity-20"
+          style={{
+            background: "radial-gradient(circle, #ddb349 0%, transparent 70%)",
+            filter: "blur(20px)",
+          }}
+        ></div>
+        <div
+          className="absolute bottom-8 left-8 w-24 h-24 rounded-full opacity-15"
+          style={{
+            background: "radial-gradient(circle, #842813 0%, transparent 70%)",
+            filter: "blur(15px)",
+          }}
+        ></div>
       </div>
 
-      <div className="main-container">
-        <div className="content-grid">
+      <div className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
           {/* Left Column - Parameters */}
-          <div className="parameters-column fade-in">
-            <div className="parameters-card">
-              <h2 className="section-title">
-                <div className="icon-container icon-container-green">
-                  <Target className="icon" />
+          <div className="fade-in">
+            <div
+              className="rounded-3xl p-8 shadow-lg"
+              style={{
+                backgroundColor: "white",
+                border: "1px solid rgba(97, 93, 85, 0.1)",
+              }}
+            >
+              <h2
+                className="text-3xl font-bold mb-8 flex items-center gap-3"
+                style={{ color: "var(--zeus)" }}
+              >
+                <div
+                  className="p-2 rounded-xl"
+                  style={{ backgroundColor: "rgba(65, 102, 49, 0.1)" }}
+                >
+                  <Target
+                    className="w-6 h-6"
+                    style={{ color: "var(--chalet-green)" }}
+                  />
                 </div>
                 {t.activityParameters}
               </h2>
 
-              <div className="form-sections">
-                {/* Error Display */}
-                {error && (
-                  <div className="error-banner">
-                    <p>{error}</p>
-                  </div>
-                )}
-
-                {/* Language Selection - FIRST */}
-                <div className="form-section">
-                  <label className="form-label">
-                    <Globe className="label-icon" />
+              <div className="space-y-6">
+                {/* Language Selection */}
+                <div>
+                  <label
+                    className="flex items-center gap-2 text-sm font-semibold mb-4"
+                    style={{ color: "var(--zeus)" }}
+                  >
+                    <Globe
+                      className="w-4 h-4"
+                      style={{ color: "var(--chalet-green)" }}
+                    />
                     {t.languageSettings} *
                   </label>
 
-                  <div className="language-grid">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="sublabel">{t.interfaceLanguage}</label>
+                      <label
+                        className="block text-xs font-medium mb-2"
+                        style={{ color: "var(--gray)" }}
+                      >
+                        {t.interfaceLanguage}
+                      </label>
                       <select
                         value={formData.interfaceLanguage}
                         onChange={(e) =>
                           handleInputChange("interfaceLanguage", e.target.value)
                         }
-                        className="form-input"
+                        className="w-full px-4 py-3 rounded-xl custom-input text-sm"
+                        style={{ backgroundColor: "white" }}
                       >
                         <option value="en">English</option>
                         <option value="it">Italiano</option>
@@ -623,13 +842,19 @@ const IcebreakerGenerator = () => {
                     </div>
 
                     <div>
-                      <label className="sublabel">{t.outputLanguage} *</label>
+                      <label
+                        className="block text-xs font-medium mb-2"
+                        style={{ color: "var(--gray)" }}
+                      >
+                        {t.outputLanguage} *
+                      </label>
                       <select
                         value={formData.language}
                         onChange={(e) =>
                           handleInputChange("language", e.target.value)
                         }
-                        className="form-input"
+                        className="w-full px-4 py-3 rounded-xl custom-input text-sm"
+                        style={{ backgroundColor: "white" }}
                       >
                         <option value="">{t.selectLanguage}</option>
                         {languages.map((lang) => (
@@ -642,12 +867,18 @@ const IcebreakerGenerator = () => {
                   </div>
                 </div>
 
-                {/* Duration and People - Same Row */}
-                <div className="form-section">
-                  <div className="input-grid">
+                {/* Duration and People */}
+                <div>
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="form-label">
-                        <Clock className="label-icon" />
+                      <label
+                        className="flex items-center gap-2 text-sm font-semibold mb-3"
+                        style={{ color: "var(--zeus)" }}
+                      >
+                        <Clock
+                          className="w-4 h-4"
+                          style={{ color: "var(--chalet-green)" }}
+                        />
                         {t.duration} *
                       </label>
                       <input
@@ -656,15 +887,22 @@ const IcebreakerGenerator = () => {
                         onChange={(e) =>
                           handleInputChange("duration", e.target.value)
                         }
-                        className="form-input"
+                        className="w-full px-4 py-3 rounded-xl custom-input"
+                        style={{ backgroundColor: "white" }}
                         placeholder="e.g. 15"
                         min="1"
                       />
                     </div>
 
                     <div>
-                      <label className="form-label">
-                        <Users className="label-icon" />
+                      <label
+                        className="flex items-center gap-2 text-sm font-semibold mb-3"
+                        style={{ color: "var(--zeus)" }}
+                      >
+                        <Users
+                          className="w-4 h-4"
+                          style={{ color: "var(--chalet-green)" }}
+                        />
                         {t.people} *
                       </label>
                       <input
@@ -673,40 +911,58 @@ const IcebreakerGenerator = () => {
                         onChange={(e) =>
                           handleInputChange("people", e.target.value)
                         }
-                        className="form-input"
+                        className="w-full px-4 py-3 rounded-xl custom-input"
+                        style={{ backgroundColor: "white" }}
                         placeholder="e.g. 12"
                         min="1"
                       />
                     </div>
                   </div>
 
-                  {/* Sub-sections under Duration and People */}
-                  <div className="subsection-grid">
-                    {/* Activity Options under Duration */}
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    {/* Activity Options */}
                     <div>
-                      <label className="form-label">
-                        <Clock className="label-icon" />
+                      <label
+                        className="flex items-center gap-2 text-sm font-semibold mb-3"
+                        style={{ color: "var(--zeus)" }}
+                      >
+                        <Clock
+                          className="w-4 h-4"
+                          style={{ color: "var(--chalet-green)" }}
+                        />
                         {t.activityOptions}
                       </label>
 
-                      <div className="checkbox-container">
-                        <label className="checkbox-item">
+                      <div className="space-y-2">
+                        <label
+                          className="flex items-center gap-3 cursor-pointer p-2 rounded-lg transition-all hover:bg-opacity-50"
+                          style={{
+                            backgroundColor: "rgba(97, 93, 85, 0.05)",
+                          }}
+                        >
                           <input
                             type="checkbox"
                             checked={formData.includeTimeBreakdown}
                             onChange={(e) =>
                               handleInputChange(
                                 "includeTimeBreakdown",
-                                e.target.checked
+                                e.target.checked,
                               )
                             }
-                            className="checkbox-input"
+                            className="w-4 h-4 rounded"
+                            style={{ accentColor: "var(--chalet-green)" }}
                           />
                           <div>
-                            <span className="checkbox-title">
+                            <span
+                              className="text-xs font-medium"
+                              style={{ color: "var(--zeus)" }}
+                            >
                               {t.timeBreakdown}
                             </span>
-                            <p className="checkbox-description">
+                            <p
+                              className="text-xs mt-1"
+                              style={{ color: "var(--gray)" }}
+                            >
                               {t.timeBreakdownDesc}
                             </p>
                           </div>
@@ -714,10 +970,16 @@ const IcebreakerGenerator = () => {
                       </div>
                     </div>
 
-                    {/* Work Groups under People */}
+                    {/* Work Groups */}
                     <div>
-                      <label className="form-label">
-                        <Users className="label-icon" />
+                      <label
+                        className="flex items-center gap-2 text-sm font-semibold mb-3"
+                        style={{ color: "var(--zeus)" }}
+                      >
+                        <Users
+                          className="w-4 h-4"
+                          style={{ color: "var(--chalet-green)" }}
+                        />
                         {t.workgroups}
                       </label>
                       <textarea
@@ -725,7 +987,8 @@ const IcebreakerGenerator = () => {
                         onChange={(e) =>
                           handleInputChange("workgroups", e.target.value)
                         }
-                        className="form-input form-textarea small-textarea"
+                        className="w-full px-4 py-3 rounded-xl custom-input resize-none text-sm"
+                        style={{ backgroundColor: "white" }}
                         placeholder={t.workgroupsPlaceholder}
                         rows="3"
                       />
@@ -734,20 +997,27 @@ const IcebreakerGenerator = () => {
                 </div>
 
                 {/* Purpose */}
-                <div className="form-section">
-                  <label className="form-label">
-                    <Target className="label-icon" />
+                <div>
+                  <label
+                    className="flex items-center gap-2 text-sm font-semibold mb-4"
+                    style={{ color: "var(--zeus)" }}
+                  >
+                    <Target
+                      className="w-4 h-4"
+                      style={{ color: "var(--chalet-green)" }}
+                    />
                     {t.purpose} *
                   </label>
-                  <div className="purpose-grid">
-                    {predefinedPurposes.map((purpose, index) => (
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    {predefinedPurposes.map((purpose) => (
                       <label
                         key={purpose}
-                        className={`purpose-item ${
-                          formData.purposes.includes(purpose)
-                            ? "purpose-item-selected"
-                            : ""
-                        }`}
+                        className="flex items-center gap-3 cursor-pointer p-3 rounded-lg transition-all hover:bg-opacity-50"
+                        style={{
+                          backgroundColor: formData.purposes.includes(purpose)
+                            ? "rgba(65, 102, 49, 0.1)"
+                            : "rgba(97, 93, 85, 0.05)",
+                        }}
                       >
                         <input
                           type="checkbox"
@@ -762,13 +1032,19 @@ const IcebreakerGenerator = () => {
                               (formData.customPurpose2 ? 1 : 0) >=
                               2
                           }
-                          className="checkbox-input"
+                          className="w-4 h-4 rounded"
+                          style={{ accentColor: "var(--chalet-green)" }}
                         />
-                        <span className="purpose-text">{purpose}</span>
+                        <span
+                          className="text-sm font-medium"
+                          style={{ color: "var(--zeus)" }}
+                        >
+                          {purpose}
+                        </span>
                       </label>
                     ))}
                   </div>
-                  <div className="custom-purposes">
+                  <div className="space-y-3">
                     <input
                       type="text"
                       value={formData.customPurpose1}
@@ -781,7 +1057,8 @@ const IcebreakerGenerator = () => {
                           (formData.customPurpose2 ? 1 : 0) >=
                           2
                       }
-                      className="form-input small-input"
+                      className="w-full px-4 py-3 text-sm rounded-xl custom-input"
+                      style={{ backgroundColor: "white" }}
                       placeholder={t.customPurpose1}
                     />
                     <input
@@ -796,16 +1073,23 @@ const IcebreakerGenerator = () => {
                           (formData.customPurpose1 ? 1 : 0) >=
                           2
                       }
-                      className="form-input small-input"
+                      className="w-full px-4 py-3 text-sm rounded-xl custom-input"
+                      style={{ backgroundColor: "white" }}
                       placeholder={t.customPurpose2}
                     />
                   </div>
                 </div>
 
                 {/* Desired Outcome */}
-                <div className="form-section">
-                  <label className="form-label">
-                    <Target className="label-icon" />
+                <div>
+                  <label
+                    className="flex items-center gap-2 text-sm font-semibold mb-3"
+                    style={{ color: "var(--zeus)" }}
+                  >
+                    <Target
+                      className="w-4 h-4"
+                      style={{ color: "var(--chalet-green)" }}
+                    />
                     {t.desiredOutcome}
                   </label>
                   <textarea
@@ -813,16 +1097,23 @@ const IcebreakerGenerator = () => {
                     onChange={(e) =>
                       handleInputChange("desiredOutcome", e.target.value)
                     }
-                    className="form-input form-textarea"
+                    className="w-full px-4 py-3 rounded-xl custom-input resize-none"
+                    style={{ backgroundColor: "white" }}
                     placeholder="e.g. Highlight team skills, create a shared map..."
                     rows="3"
                   />
                 </div>
 
                 {/* Required Materials */}
-                <div className="form-section">
-                  <label className="form-label">
-                    <Package className="label-icon" />
+                <div>
+                  <label
+                    className="flex items-center gap-2 text-sm font-semibold mb-3"
+                    style={{ color: "var(--zeus)" }}
+                  >
+                    <Package
+                      className="w-4 h-4"
+                      style={{ color: "var(--chalet-green)" }}
+                    />
                     {t.requiredMaterials}
                   </label>
                   <textarea
@@ -830,16 +1121,23 @@ const IcebreakerGenerator = () => {
                     onChange={(e) =>
                       handleInputChange("requiredMaterials", e.target.value)
                     }
-                    className="form-input form-textarea"
+                    className="w-full px-4 py-3 rounded-xl custom-input resize-none"
+                    style={{ backgroundColor: "white" }}
                     placeholder="e.g. Post-it notes, markers, 20-meter rope..."
                     rows="3"
                   />
                 </div>
 
                 {/* Additional Notes */}
-                <div className="form-section">
-                  <label className="form-label">
-                    <Edit3 className="label-icon" />
+                <div>
+                  <label
+                    className="flex items-center gap-2 text-sm font-semibold mb-3"
+                    style={{ color: "var(--zeus)" }}
+                  >
+                    <Edit3
+                      className="w-4 h-4"
+                      style={{ color: "var(--chalet-green)" }}
+                    />
                     {t.additionalNotes}
                   </label>
                   <textarea
@@ -847,7 +1145,8 @@ const IcebreakerGenerator = () => {
                     onChange={(e) =>
                       handleInputChange("additionalNotes", e.target.value)
                     }
-                    className="form-input form-textarea"
+                    className="w-full px-4 py-3 rounded-xl custom-input resize-none"
+                    style={{ backgroundColor: "white" }}
                     placeholder="Add details, specific context, particular requirements..."
                     rows="4"
                   />
@@ -857,28 +1156,38 @@ const IcebreakerGenerator = () => {
                 <button
                   onClick={generateActivity}
                   disabled={!canGenerate || isGenerating}
-                  className={`generate-button ${
+                  className={`w-full py-4 px-6 rounded-xl font-semibold flex items-center justify-center gap-3 custom-btn text-lg ${
                     canGenerate && !isGenerating
-                      ? hasGenerated && formChanged
-                        ? "generate-button-update"
-                        : "generate-button-primary"
-                      : "generate-button-disabled"
+                      ? "shadow-lg"
+                      : "cursor-not-allowed opacity-50"
                   }`}
+                  style={{
+                    backgroundColor:
+                      canGenerate && !isGenerating
+                        ? hasGenerated && formChanged
+                          ? "var(--pueblo)"
+                          : "var(--chalet-green)"
+                        : "var(--gray)",
+                    color: "white",
+                  }}
                 >
                   {isGenerating ? (
-                    <RefreshCw className="button-icon spinner" />
+                    <RefreshCw className="w-5 h-5 spinner" />
                   ) : (
-                    <Play className="button-icon" />
+                    <Play className="w-5 h-5" />
                   )}
                   {isGenerating
                     ? t.generating
                     : hasGenerated
-                    ? t.update
-                    : t.generate}
+                      ? t.update
+                      : t.generate}
                 </button>
 
                 {hasGenerated && formChanged && (
-                  <p className="parameters-changed-text">
+                  <p
+                    className="text-sm text-center font-medium"
+                    style={{ color: "var(--pueblo)" }}
+                  >
                     {t.parametersChanged}
                   </p>
                 )}
@@ -887,34 +1196,66 @@ const IcebreakerGenerator = () => {
           </div>
 
           {/* Right Column - Output */}
-          <div className="output-column fade-in">
-            <div className="output-card">
-              <h2 className="section-title">
-                <div className="icon-container icon-container-yellow">
-                  <MessageSquare className="icon" />
+          <div className="fade-in">
+            <div
+              className="rounded-3xl p-8 shadow-lg h-full flex flex-col"
+              style={{
+                backgroundColor: "white",
+                border: "1px solid rgba(97, 93, 85, 0.1)",
+              }}
+            >
+              <h2
+                className="text-3xl font-bold mb-8 flex items-center gap-3"
+                style={{ color: "var(--zeus)" }}
+              >
+                <div
+                  className="p-2 rounded-xl"
+                  style={{ backgroundColor: "rgba(221, 179, 73, 0.1)" }}
+                >
+                  <MessageSquare
+                    className="w-6 h-6"
+                    style={{ color: "var(--anzac)" }}
+                  />
                 </div>
                 {t.generatedActivity}
               </h2>
 
-              <div className="output-content">
+              <div className="flex-1 flex flex-col">
                 {!hasGenerated && !isGenerating && (
-                  <div className="empty-state">
-                    <div className="empty-state-content">
-                      <div className="empty-state-icon">
-                        <Play className="empty-icon" />
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                      <div
+                        className="p-6 rounded-full mb-6"
+                        style={{ backgroundColor: "rgba(97, 93, 85, 0.05)" }}
+                      >
+                        <Play
+                          className="w-16 h-16 mx-auto"
+                          style={{ color: "var(--gray)" }}
+                        />
                       </div>
-                      <p className="empty-state-text">{t.fillParameters}</p>
+                      <p className="text-lg" style={{ color: "var(--gray)" }}>
+                        {t.fillParameters}
+                      </p>
                     </div>
                   </div>
                 )}
 
                 {isGenerating && (
-                  <div className="loading-state">
-                    <div className="loading-state-content">
-                      <div className="loading-state-icon">
-                        <RefreshCw className="loading-icon spinner" />
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                      <div
+                        className="p-6 rounded-full mb-6"
+                        style={{ backgroundColor: "rgba(65, 102, 49, 0.1)" }}
+                      >
+                        <RefreshCw
+                          className="w-16 h-16 mx-auto spinner"
+                          style={{ color: "var(--chalet-green)" }}
+                        />
                       </div>
-                      <p className="loading-state-text">
+                      <p
+                        className="text-lg font-medium"
+                        style={{ color: "var(--zeus)" }}
+                      >
                         {t.generatingActivity}
                       </p>
                     </div>
@@ -922,25 +1263,46 @@ const IcebreakerGenerator = () => {
                 )}
 
                 {output && !isGenerating && (
-                  <div className="output-result">
-                    <div className="output-text">{output}</div>
+                  <div className="flex-1 overflow-auto">
+                    <div
+                      className="whitespace-pre-wrap text-sm p-6 rounded-2xl h-full"
+                      style={{
+                        backgroundColor: isError
+                          ? "rgba(132, 40, 19, 0.04)"
+                          : "rgba(97, 93, 85, 0.03)",
+                        border: isError
+                          ? "1px solid rgba(132, 40, 19, 0.2)"
+                          : "1px solid rgba(97, 93, 85, 0.1)",
+                        color: isError ? "var(--pueblo)" : "var(--zeus)",
+                        lineHeight: "1.6",
+                      }}
+                    >
+                      {output}
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* Action Buttons */}
-              {hasGenerated && !isGenerating && (
-                <div className="action-buttons">
-                  <div className="button-group">
+              {hasGenerated && !isGenerating && !isError && (
+                <div
+                  className="mt-8 pt-6"
+                  style={{ borderTop: "1px solid rgba(97, 93, 85, 0.1)" }}
+                >
+                  <div className="flex flex-wrap gap-3">
                     <button
                       onClick={downloadCSV}
                       disabled={isDownloading}
-                      className="action-button action-button-green"
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium custom-btn"
+                      style={{
+                        backgroundColor: "var(--chalet-green)",
+                        color: "white",
+                      }}
                     >
                       {isDownloading ? (
-                        <RefreshCw className="button-icon spinner" />
+                        <RefreshCw className="w-4 h-4 spinner" />
                       ) : (
-                        <Download className="button-icon" />
+                        <Download className="w-4 h-4" />
                       )}
                       {t.downloadCSV}
                     </button>
@@ -948,22 +1310,30 @@ const IcebreakerGenerator = () => {
                     <button
                       onClick={downloadText}
                       disabled={isDownloading}
-                      className="action-button action-button-yellow"
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium custom-btn"
+                      style={{
+                        backgroundColor: "var(--anzac)",
+                        color: "var(--zeus)",
+                      }}
                     >
                       {isDownloading ? (
-                        <RefreshCw className="button-icon spinner" />
+                        <RefreshCw className="w-4 h-4 spinner" />
                       ) : (
-                        <Download className="button-icon" />
+                        <Download className="w-4 h-4" />
                       )}
                       {t.downloadText}
                     </button>
 
                     <button
-                      onClick={openBuyMeACoffee}
-                      className="action-button action-button-red coffee-button"
+                      onClick={openTipDeveloper}
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium custom-btn ml-auto"
+                      style={{
+                        backgroundColor: "var(--pueblo)",
+                        color: "white",
+                      }}
                     >
-                      <Coffee className="button-icon" />
-                      {t.buyMeCoffee}
+                      <Heart className="w-4 h-4" />
+                      {t.tipDeveloper}
                     </button>
                   </div>
                 </div>
