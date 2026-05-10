@@ -76,10 +76,11 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Satisfied with the result? Tip the developer",
       timeoutError: "The generation took too long. Please try again.",
       genericError: "An error occurred. Please try again.",
+      lastFreeWarning: "This is your last free generation. Make it count!",
       paywallTitle: "You've explored your 3 free activities.",
       paywallSubtitle: "Ready to unlock unlimited icebreaker generations?",
       paywallTier1: "30 generations",
-      paywallTier2: "100 generations — most popular",
+      paywallTier2: "100 generations",
       paywallTier3: "250 generations",
       paywallBuy: "Buy",
       paywallCodeLabel: "Already have an access code?",
@@ -136,10 +137,11 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Soddisfatto del risultato? Offri una mancia allo sviluppatore",
       timeoutError: "La generazione ha impiegato troppo tempo. Riprova.",
       genericError: "Si è verificato un errore. Riprova.",
+      lastFreeWarning: "Questa è la tua ultima generazione gratuita.",
       paywallTitle: "Hai esplorato le tue 3 attività gratuite.",
       paywallSubtitle: "Pronto a sbloccare generazioni illimitate di icebreaker?",
       paywallTier1: "30 generazioni",
-      paywallTier2: "100 generazioni — più popolare",
+      paywallTier2: "100 generazioni",
       paywallTier3: "250 generazioni",
       paywallBuy: "Acquista",
       paywallCodeLabel: "Hai già un codice di accesso?",
@@ -197,10 +199,11 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "¿Satisfecho con el resultado? Dale una propina al desarrollador",
       timeoutError: "La generación tardó demasiado. Inténtalo de nuevo.",
       genericError: "Se produjo un error. Inténtalo de nuevo.",
+      lastFreeWarning: "Esta es tu última generación gratuita.",
       paywallTitle: "Has explorado tus 3 actividades gratuitas.",
       paywallSubtitle: "¿Listo para desbloquear generaciones ilimitadas de icebreakers?",
       paywallTier1: "30 generaciones",
-      paywallTier2: "100 generaciones — más popular",
+      paywallTier2: "100 generaciones",
       paywallTier3: "250 generaciones",
       paywallBuy: "Comprar",
       paywallCodeLabel: "¿Ya tienes un código de acceso?",
@@ -258,10 +261,11 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Satisfait du résultat ? Donnez un pourboire au développeur",
       timeoutError: "La génération a pris trop de temps. Veuillez réessayer.",
       genericError: "Une erreur est survenue. Veuillez réessayer.",
+      lastFreeWarning: "C'est votre dernière génération gratuite.",
       paywallTitle: "Vous avez exploré vos 3 activités gratuites.",
       paywallSubtitle: "Prêt à débloquer des générations illimitées de brise-glace ?",
       paywallTier1: "30 générations",
-      paywallTier2: "100 générations — le plus populaire",
+      paywallTier2: "100 générations",
       paywallTier3: "250 générations",
       paywallBuy: "Acheter",
       paywallCodeLabel: "Vous avez déjà un code d'accès ?",
@@ -319,10 +323,11 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Mit dem Ergebnis zufrieden? Geben Sie dem Entwickler ein Trinkgeld",
       timeoutError: "Die Generierung hat zu lange gedauert. Bitte erneut versuchen.",
       genericError: "Ein Fehler ist aufgetreten. Bitte erneut versuchen.",
+      lastFreeWarning: "Dies ist Ihre letzte kostenlose Generierung.",
       paywallTitle: "Sie haben Ihre 3 kostenlosen Aktivitäten erkundet.",
       paywallSubtitle: "Bereit, unbegrenzte Eisbrecher-Generierungen freizuschalten?",
       paywallTier1: "30 Generierungen",
-      paywallTier2: "100 Generierungen — am beliebtesten",
+      paywallTier2: "100 Generierungen",
       paywallTier3: "250 Generierungen",
       paywallBuy: "Kaufen",
       paywallCodeLabel: "Haben Sie bereits einen Zugangscode?",
@@ -696,6 +701,11 @@ const IcebreakerGenerator = () => {
 
               <div className="form-sections">
                 {/* Error Display */}
+                {generationCount === 2 && !isUnlocked && !showPaywall && (
+                  <div className="warning-banner">
+                    <p>{t.lastFreeWarning}</p>
+                  </div>
+                )}
                 {error && (
                   <div className="error-banner">
                     <p>{error}</p>
