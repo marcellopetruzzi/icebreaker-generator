@@ -35,6 +35,11 @@ const IcebreakerGenerator = () => {
   const [formChanged, setFormChanged] = useState(false);
   const [initialFormData, setInitialFormData] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [generationCount, setGenerationCount] = useState(() => parseInt(localStorage.getItem("igGenerationCount") || "0"));
+  const [isUnlocked, setIsUnlocked] = useState(() => localStorage.getItem("igUnlocked") === "true");
+  const [accessCode, setAccessCode] = useState("");
+  const [codeError, setCodeError] = useState("");
   const [error, setError] = useState("");
 
   // Translations object
@@ -71,6 +76,17 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Satisfied with the result? Tip the developer",
       timeoutError: "The generation took too long. Please try again.",
       genericError: "An error occurred. Please try again.",
+      paywallTitle: "You've explored your 3 free activities.",
+      paywallSubtitle: "Ready to unlock unlimited icebreaker generations?",
+      paywallTier1: "30 generations",
+      paywallTier2: "100 generations — most popular",
+      paywallTier3: "250 generations",
+      paywallBuy: "Buy",
+      paywallCodeLabel: "Already have an access code?",
+      paywallCodePlaceholder: "Enter your code here",
+      paywallCodeButton: "Unlock",
+      paywallCodeError: "Invalid code. Please try again.",
+      paywallContact: "After payment, email your PayPal receipt to icebreakers@humanitage.com and you will receive your access code.",
       selectLanguage: "Select output language...",
       workgroups: "Work Groups (optional)",
       workgroupsPlaceholder:
@@ -120,6 +136,17 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Soddisfatto del risultato? Offri una mancia allo sviluppatore",
       timeoutError: "La generazione ha impiegato troppo tempo. Riprova.",
       genericError: "Si è verificato un errore. Riprova.",
+      paywallTitle: "Hai esplorato le tue 3 attività gratuite.",
+      paywallSubtitle: "Pronto a sbloccare generazioni illimitate di icebreaker?",
+      paywallTier1: "30 generazioni",
+      paywallTier2: "100 generazioni — più popolare",
+      paywallTier3: "250 generazioni",
+      paywallBuy: "Acquista",
+      paywallCodeLabel: "Hai già un codice di accesso?",
+      paywallCodePlaceholder: "Inserisci il tuo codice qui",
+      paywallCodeButton: "Sblocca",
+      paywallCodeError: "Codice non valido. Riprova.",
+      paywallContact: "Dopo il pagamento, invia la ricevuta PayPal a icebreakers@humanitage.com e riceverai il tuo codice di accesso.",
       selectLanguage: "Seleziona lingua di output...",
       workgroups: "Sottogruppi di Lavoro (opzionale)",
       workgroupsPlaceholder:
@@ -170,6 +197,17 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "¿Satisfecho con el resultado? Dale una propina al desarrollador",
       timeoutError: "La generación tardó demasiado. Inténtalo de nuevo.",
       genericError: "Se produjo un error. Inténtalo de nuevo.",
+      paywallTitle: "Has explorado tus 3 actividades gratuitas.",
+      paywallSubtitle: "¿Listo para desbloquear generaciones ilimitadas de icebreakers?",
+      paywallTier1: "30 generaciones",
+      paywallTier2: "100 generaciones — más popular",
+      paywallTier3: "250 generaciones",
+      paywallBuy: "Comprar",
+      paywallCodeLabel: "¿Ya tienes un código de acceso?",
+      paywallCodePlaceholder: "Ingresa tu código aquí",
+      paywallCodeButton: "Desbloquear",
+      paywallCodeError: "Código inválido. Inténtalo de nuevo.",
+      paywallContact: "Después del pago, envía tu recibo de PayPal a icebreakers@humanitage.com y recibirás tu código de acceso.",
       selectLanguage: "Selecciona idioma de salida...",
       workgroups: "Grupos de Trabajo (opcional)",
       workgroupsPlaceholder:
@@ -220,6 +258,17 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Satisfait du résultat ? Donnez un pourboire au développeur",
       timeoutError: "La génération a pris trop de temps. Veuillez réessayer.",
       genericError: "Une erreur est survenue. Veuillez réessayer.",
+      paywallTitle: "Vous avez exploré vos 3 activités gratuites.",
+      paywallSubtitle: "Prêt à débloquer des générations illimitées de brise-glace ?",
+      paywallTier1: "30 générations",
+      paywallTier2: "100 générations — le plus populaire",
+      paywallTier3: "250 générations",
+      paywallBuy: "Acheter",
+      paywallCodeLabel: "Vous avez déjà un code d'accès ?",
+      paywallCodePlaceholder: "Entrez votre code ici",
+      paywallCodeButton: "Débloquer",
+      paywallCodeError: "Code invalide. Veuillez réessayer.",
+      paywallContact: "Après le paiement, envoyez votre reçu PayPal à icebreakers@humanitage.com et vous recevrez votre code d'accès.",
       selectLanguage: "Sélectionner la langue de sortie...",
       workgroups: "Groupes de Travail (optionnel)",
       workgroupsPlaceholder:
@@ -270,6 +319,17 @@ const IcebreakerGenerator = () => {
       tipDeveloper: "Mit dem Ergebnis zufrieden? Geben Sie dem Entwickler ein Trinkgeld",
       timeoutError: "Die Generierung hat zu lange gedauert. Bitte erneut versuchen.",
       genericError: "Ein Fehler ist aufgetreten. Bitte erneut versuchen.",
+      paywallTitle: "Sie haben Ihre 3 kostenlosen Aktivitäten erkundet.",
+      paywallSubtitle: "Bereit, unbegrenzte Eisbrecher-Generierungen freizuschalten?",
+      paywallTier1: "30 Generierungen",
+      paywallTier2: "100 Generierungen — am beliebtesten",
+      paywallTier3: "250 Generierungen",
+      paywallBuy: "Kaufen",
+      paywallCodeLabel: "Haben Sie bereits einen Zugangscode?",
+      paywallCodePlaceholder: "Code hier eingeben",
+      paywallCodeButton: "Freischalten",
+      paywallCodeError: "Ungültiger Code. Bitte erneut versuchen.",
+      paywallContact: "Nach der Zahlung senden Sie Ihre PayPal-Quittung an icebreakers@humanitage.com und Sie erhalten Ihren Zugangscode.",
       selectLanguage: "Ausgabesprache auswählen...",
       workgroups: "Arbeitsgruppen (optional)",
       workgroupsPlaceholder:
@@ -482,6 +542,14 @@ const IcebreakerGenerator = () => {
       const result = await callAPI("generate", requestData);
 
       setOutput(result.activity);
+      if (!isUnlocked) {
+        const newCount = generationCount + 1;
+        setGenerationCount(newCount);
+        localStorage.setItem("igGenerationCount", newCount.toString());
+        if (newCount >= 3) {
+          setShowPaywall(true);
+        }
+      }
       setHasGenerated(true);
       setFormChanged(false);
       setInitialFormData({ ...formData });
@@ -562,6 +630,33 @@ const IcebreakerGenerator = () => {
     const textContent = await generateDownloadContent("text");
     if (textContent) {
       downloadFile(textContent, "icebreaker-activity.txt", "text/plain");
+    }
+  };
+
+  const VALID_CODES = {
+    "IB-30-": 30,
+    "IB-100-": 100,
+    "IB-250-": 250,
+  };
+
+  const validateCode = (code) => {
+    const upper = code.toUpperCase().trim();
+    for (const prefix of Object.keys(VALID_CODES)) {
+      if (upper.startsWith(prefix) && upper.length > prefix.length) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const handleCodeSubmit = () => {
+    if (validateCode(accessCode)) {
+      localStorage.setItem("igUnlocked", "true");
+      setIsUnlocked(true);
+      setShowPaywall(false);
+      setCodeError("");
+    } else {
+      setCodeError(t.paywallCodeError);
     }
   };
 
@@ -866,7 +961,7 @@ const IcebreakerGenerator = () => {
                 {/* Generate Button */}
                 <button
                   onClick={generateActivity}
-                  disabled={!canGenerate || isGenerating}
+                  disabled={!canGenerate || isGenerating || (showPaywall && !isUnlocked)}
                   className={`generate-button ${
                     canGenerate && !isGenerating
                       ? hasGenerated && formChanged
@@ -932,7 +1027,36 @@ const IcebreakerGenerator = () => {
                 )}
 
                 {output && !isGenerating && (
-                  <div className="output-result">
+                  {showPaywall && (
+                  <div className="paywall-screen">
+                    <h3 className="paywall-title">{t.paywallTitle}</h3>
+                    <p className="paywall-subtitle">{t.paywallSubtitle}</p>
+                    <div className="paywall-tiers">
+                      <a href="https://www.paypal.com/paypalme/MarcelloPetruzzi/9" target="_blank" rel="noreferrer" className="paywall-tier-button">
+                        <span className="paywall-tier-price">€9</span>
+                        <span className="paywall-tier-label">{t.paywallTier1}</span>
+                      </a>
+                      <a href="https://www.paypal.com/paypalme/MarcelloPetruzzi/19" target="_blank" rel="noreferrer" className="paywall-tier-button paywall-tier-popular">
+                        <span className="paywall-tier-price">€19</span>
+                        <span className="paywall-tier-label">{t.paywallTier2}</span>
+                      </a>
+                      <a href="https://www.paypal.com/paypalme/MarcelloPetruzzi/35" target="_blank" rel="noreferrer" className="paywall-tier-button">
+                        <span className="paywall-tier-price">€35</span>
+                        <span className="paywall-tier-label">{t.paywallTier3}</span>
+                      </a>
+                    </div>
+                    <p className="paywall-contact">{t.paywallContact}</p>
+                    <div className="paywall-code-section">
+                      <label className="paywall-code-label">{t.paywallCodeLabel}</label>
+                      <div className="paywall-code-input-group">
+                        <input type="text" value={accessCode} onChange={(e) => setAccessCode(e.target.value)} placeholder={t.paywallCodePlaceholder} className="form-input paywall-code-input" />
+                        <button onClick={handleCodeSubmit} className="paywall-code-button">{t.paywallCodeButton}</button>
+                      </div>
+                      {codeError && <p className="paywall-code-error">{codeError}</p>}
+                    </div>
+                  </div>
+                )}
+                {!showPaywall && <div className="output-result">
                     <div className="output-text">{output}</div>
                   </div>
                 )}

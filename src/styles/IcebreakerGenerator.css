@@ -871,3 +871,137 @@ body {
     padding: 0;
   }
 }
+/* Paywall Styles */
+.paywall-screen {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.paywall-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--zeus);
+}
+
+.paywall-subtitle {
+  font-size: 1.125rem;
+  color: var(--gray);
+  max-width: 28rem;
+}
+
+.paywall-tiers {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.paywall-tier-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  background-color: rgba(65, 102, 49, 0.08);
+  border: 2px solid rgba(65, 102, 49, 0.2);
+  text-decoration: none;
+  transition: var(--transition-medium);
+  flex: 1;
+  min-width: 120px;
+}
+
+.paywall-tier-button:hover {
+  background-color: rgba(65, 102, 49, 0.15);
+  border-color: var(--chalet-green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.paywall-tier-popular {
+  background-color: var(--chalet-green);
+  border-color: var(--chalet-green);
+}
+
+.paywall-tier-popular:hover {
+  background-color: #3a5a2c;
+  border-color: #3a5a2c;
+}
+
+.paywall-tier-price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--chalet-green);
+}
+
+.paywall-tier-popular .paywall-tier-price {
+  color: white;
+}
+
+.paywall-tier-label {
+  font-size: 0.75rem;
+  color: var(--gray);
+  margin-top: 0.25rem;
+}
+
+.paywall-tier-popular .paywall-tier-label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.paywall-contact {
+  font-size: 0.8125rem;
+  color: var(--gray);
+  max-width: 28rem;
+  line-height: 1.6;
+}
+
+.paywall-code-section {
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.paywall-code-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--zeus);
+  text-align: left;
+}
+
+.paywall-code-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.paywall-code-input {
+  flex: 1;
+}
+
+.paywall-code-button {
+  padding: 0.75rem 1.25rem;
+  background-color: var(--chalet-green);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-medium);
+  white-space: nowrap;
+}
+
+.paywall-code-button:hover {
+  background-color: #3a5a2c;
+  transform: translateY(-1px);
+}
+
+.paywall-code-error {
+  font-size: 0.8125rem;
+  color: var(--pueblo);
+  font-weight: 500;
+}
