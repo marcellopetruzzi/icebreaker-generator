@@ -437,7 +437,7 @@ const IcebreakerGenerator = () => {
         ? selectedLanguage.name
         : formData.language;
 
-      const prompt = `As an expert collaborative process facilitator, generate a personalized icebreaker/energizer with these parameters:
+      const _prompt = `As an expert collaborative process facilitator, generate a personalized icebreaker/energizer with these parameters:
 
 IMPORTANT: Generate the ENTIRE response in ${languageName}. All content including titles, instructions, and explanations must be in ${languageName}.
 
